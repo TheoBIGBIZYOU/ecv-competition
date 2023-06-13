@@ -17,6 +17,7 @@
     "@capacitor/ios": "^5.0.5",
     "@capacitor/keyboard": "5.0.4",
     "@capacitor/status-bar": "5.0.4",
+    "axios": "^1.4.0",
     "vue": "^3.2.47"
   },
   "devDependencies": {
