@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">ecv-competition</string>
+    <string name="title_activity_main">ecv-competition</string>
+    <string name="package_name">ecv.competition</string>
+    <string name="custom_url_scheme">ecv.competition</string>
+</resources>
