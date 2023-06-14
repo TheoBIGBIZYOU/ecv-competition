@@ -1,12 +1,13 @@
 <script setup>
+import { useRouter } from "vue-router";
 import axios from "axios";
-import { useRouter } from 'vue-router';
-
 import { ref } from "vue";
-import accessTokenStore from "../store/accessTokenStore.js";
+import { useUserStore } from "../store/user";
 
 const mail = ref("admin@admin.fr");
 const password = ref("adminadmin");
+
+const userStore = useUserStore();
 
 const router = useRouter();
 
@@ -25,15 +26,14 @@ function loginForm() {
   };
 
   axios
-      .request(options)
-      .then(function (response) {
-        console.log(response.data);
-        accessTokenStore.commit('updateAccessToken', response.data.access_token);
-        router.push({ name: 'Home' });
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
+    .request(options)
+    .then((response) => {
+      userStore.setupAccessToken(response.data.access_token);
+      router.push({ name: "Home" });
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 }
 </script>
 
