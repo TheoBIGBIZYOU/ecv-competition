@@ -11,7 +11,6 @@ const router = useRouter();
 onMounted(() => {
   userStore.accessToken == null ? router.push({ name: "Login" }) : "";
 });
-
 </script>
 
 <template>

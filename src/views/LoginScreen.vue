@@ -29,7 +29,7 @@ function loginForm() {
     .request(options)
     .then((response) => {
       userStore.setupAccessToken(response.data.access_token);
-      console.log(response.data);
+      // console.log(response.data);
       bridgeConnectCheck();
     })
     .catch((error) => {
@@ -55,7 +55,7 @@ function bridgeConnect(){
   axios
       .request(options)
       .then(function (response) {
-        console.log(response.data);
+        // console.log(response.data);
         window.location.href = response.data.redirect_url
       })
       .catch(function (error) {
@@ -81,9 +81,9 @@ function bridgeConnectCheck(){
   axios
       .request(options)
       .then(function (response) {
-        console.log(response.data);
+        // console.log(response.data);
         if(response.data.resources.length === 0) bridgeConnect();
-        else router.push({ name: "Home" });
+        else router.push({ name: "Transaction" });
       })
       .catch(function (error) {
         console.error(error);
