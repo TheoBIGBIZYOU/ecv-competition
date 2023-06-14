@@ -3,15 +3,18 @@ import { useRouter } from "vue-router";
 import axios from "axios";
 import { ref } from "vue";
 import { useUserStore } from "../store/user";
+import { Preferences } from "@capacitor/preferences";
 
 const mail = ref("admin@admin.fr");
 const password = ref("adminadmin");
+
+const home = "http://localhost:5173/";
 
 const userStore = useUserStore();
 
 const router = useRouter();
 
-function loginForm() {
+const loginForm = () => {
   const options = {
     method: "POST",
     url: "https://api.bridgeapi.io/v2/authenticate",
@@ -29,65 +32,72 @@ function loginForm() {
     .request(options)
     .then((response) => {
       userStore.setupAccessToken(response.data.access_token);
-      console.log(response.data);
+      Preferences.set({
+        key: "accessToken",
+        value: response.data.access_token,
+      });
       bridgeConnectCheck();
     })
     .catch((error) => {
       console.error(error);
     });
-}
+};
 
-function bridgeConnect(){
+function bridgeConnect() {
   const options = {
-    method: 'POST',
-    url: 'https://api.bridgeapi.io/v2/connect/items/add',
+    method: "POST",
+    url: "https://api.bridgeapi.io/v2/connect/items/add",
     headers: {
-      accept: 'application/json',
-      'Client-Id': import.meta.env.VITE_CLIENT_ID,
-      'Client-Secret': import.meta.env.VITE_CLIENT_SECRET,
-      Authorization: `Bearer ${userStore.accessToken}`,
-      'Bridge-Version': '2021-06-01',
-      'content-type': 'application/json'
-    },
-    data: {prefill_email: mail.value, redirect_url: 'http://localhost:5173/'}
-  };
-
-  axios
-      .request(options)
-      .then(function (response) {
-        console.log(response.data);
-        window.location.href = response.data.redirect_url
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
-}
-
-function bridgeConnectCheck(){
-
-  const options = {
-    method: 'GET',
-    url: 'https://api.bridgeapi.io/v2/items',
-    params: {limit: '50'},
-    headers: {
-      accept: 'application/json',
+      accept: "application/json",
       "Client-Id": import.meta.env.VITE_CLIENT_ID,
       "Client-Secret": import.meta.env.VITE_CLIENT_SECRET,
       Authorization: `Bearer ${userStore.accessToken}`,
-      'Bridge-Version': '2021-06-01'
-    }
+      "Bridge-Version": "2021-06-01",
+      "content-type": "application/json",
+    },
+    data: { prefill_email: mail.value, redirect_url: home },
   };
 
   axios
-      .request(options)
-      .then(function (response) {
-        console.log(response.data);
-        if(response.data.resources.length === 0) bridgeConnect();
-        else router.push({ name: "Home" });
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
+    .request(options)
+    .then(function (response) {
+      window.location.href = response.data.redirect_url;
+    })
+    .catch(function (error) {
+      console.error(error);
+    });
+}
+
+function bridgeConnectCheck() {
+  const options = {
+    method: "GET",
+    url: "https://api.bridgeapi.io/v2/items",
+    params: { limit: "50" },
+    headers: {
+      accept: "application/json",
+      "Client-Id": import.meta.env.VITE_CLIENT_ID,
+      "Client-Secret": import.meta.env.VITE_CLIENT_SECRET,
+      Authorization: `Bearer ${userStore.accessToken}`,
+      "Bridge-Version": "2021-06-01",
+    },
+  };
+
+  axios
+    .request(options)
+    .then(function (response) {
+      if (response.data.resources.length === 0) {
+        bridgeConnect();
+      } else {
+        Preferences.set({
+          key: "linkBank",
+          value: true,
+        });
+        router.push({ name: "Home" });
+      }
+    })
+    .catch(function (error) {
+      console.error(error);
+    });
 }
 </script>
 
