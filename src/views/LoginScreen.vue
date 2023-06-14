@@ -8,6 +8,8 @@ import accessTokenStore from "../store/accessTokenStore.js";
 const mail = ref("admin@admin.fr");
 const password = ref("adminadmin");
 
+const router = useRouter();
+
 function loginForm() {
   const options = {
     method: "POST",
@@ -27,8 +29,6 @@ function loginForm() {
       .then(function (response) {
         console.log(response.data);
         accessTokenStore.commit('updateAccessToken', response.data.access_token);
-        console.log(accessTokenStore.state.accessToken);
-        const router = useRouter();
         router.push({ name: 'Home' });
       })
       .catch(function (error) {
