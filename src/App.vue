@@ -1,7 +1,7 @@
 <script setup>
-import RegisterScreen from './components/RegisterScreen.vue'
+import RegisterScreen from './views/RegisterScreen.vue'
 </script>
 
 <template>
-  <RegisterScreen />
+  <router-view></router-view>
 </template>
