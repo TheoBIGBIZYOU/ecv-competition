@@ -3,14 +3,15 @@ import axios from "axios";
 import { useRouter } from 'vue-router';
 
 import { ref } from "vue";
+import accessTokenStore from "../store/accessTokenStore.js";
 
-const mail = ref("");
-const password = ref("");
+const mail = ref("admin@admin.fr");
+const password = ref("adminadmin");
 
-function registerForm() {
+function loginForm() {
   const options = {
     method: "POST",
-    url: "https://api.bridgeapi.io/v2/users",
+    url: "https://api.bridgeapi.io/v2/authenticate",
     headers: {
       accept: "application/json",
       "Client-Id": import.meta.env.VITE_CLIENT_ID,
@@ -25,8 +26,10 @@ function registerForm() {
       .request(options)
       .then(function (response) {
         console.log(response.data);
-        // const router = useRouter();
-        // router.push({ name: 'Home' });
+        accessTokenStore.commit('updateAccessToken', response.data.access_token);
+        console.log(accessTokenStore.state.accessToken);
+        const router = useRouter();
+        router.push({ name: 'Home' });
       })
       .catch(function (error) {
         console.error(error);
@@ -35,9 +38,9 @@ function registerForm() {
 </script>
 
 <template>
-  <form ref="register" @submit.prevent="registerForm">
+  <form ref="login" @submit.prevent="loginForm">
     <input type="email" v-model="mail" />
     <input type="password" v-model="password" />
-    <button type="submit">S'enregistrer</button>
+    <button type="submit">Se connecter</button>
   </form>
 </template>

@@ -5,6 +5,7 @@ import App from './App.vue'
 // Components
 import HomePage from './components/HomePage.vue';
 import RegisterScreen from './components/RegisterScreen.vue';
+import LoginScreen from './components/LoginScreen.vue';
 
 const routes = [
     {
@@ -17,6 +18,11 @@ const routes = [
         name: 'Register',
         component: RegisterScreen
     },
+    {
+        path: '/login',
+        name: 'Login',
+        component: LoginScreen
+    }
 ];
 
 const router = createRouter({
