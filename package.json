@@ -18,7 +18,8 @@
     "@capacitor/keyboard": "5.0.4",
     "@capacitor/status-bar": "5.0.4",
     "axios": "^1.4.0",
-    "vue": "^3.2.47"
+    "vue": "^3.2.47",
+    "vue-router": "^4.2.2"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.1.0",
