@@ -1,13 +1,15 @@
 <script setup>
 import axios from "axios";
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
 
 import { ref } from "vue";
 
 const mail = ref("");
 const password = ref("");
 
-function registerForm() {
+const router = useRouter();
+
+const registerForm = () => {
   const options = {
     method: "POST",
     url: "https://api.bridgeapi.io/v2/users",
@@ -22,15 +24,14 @@ function registerForm() {
   };
 
   axios
-      .request(options)
-      .then(function (response) {
-        console.log(response.data);
-        // const router = useRouter();
-        // router.push({ name: 'Home' });
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
+    .request(options)
+    .then(function (response) {
+      console.log(response.data);
+      router.push({ name: 'Home' });
+    })
+    .catch(function (error) {
+      console.error(error);
+    });
 }
 </script>
 

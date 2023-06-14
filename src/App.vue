@@ -1,8 +1,7 @@
 <script setup>
-import RegisterScreen from './components/RegisterScreen.vue'
-import LoginScreen from "./components/LoginScreen.vue";
+import RegisterScreen from './views/RegisterScreen.vue'
 </script>
 
 <template>
-  <LoginScreen />
+  <router-view></router-view>
 </template>
