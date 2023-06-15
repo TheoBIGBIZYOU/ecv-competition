@@ -79,10 +79,12 @@ accessToken();
   <ul>
     {{transactionsStore.categories}}
     <li v-for="item in transactionsStore.transactions" :key="item.id">
-      <p>amount : {{ item.amount }} {{ item.currency_code }} </p>
-      <p>date : {{ item.date }}</p>
-      <p>banque : {{ item.clean_description }}</p>
-      <p v-if="item.category">categ : {{ item.category }} </p>
+      <router-link :to="`/transaction/${item.id}`">
+        <p>amount : {{ item.amount }} {{ item.currency_code }} </p>
+        <p>date : {{ item.date }}</p>
+        <p>banque : {{ item.clean_description }}</p>
+        <p v-if="item.category">categ : {{ item.category }} </p>
+      </router-link>
     </li>
   </ul>
 </template>

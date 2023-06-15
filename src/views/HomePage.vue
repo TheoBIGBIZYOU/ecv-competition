@@ -1,6 +1,5 @@
 <script setup>
 import { useRouter } from "vue-router";
-import axios from "axios";
 import { useUserStore } from "../store/user";
 import { Preferences } from '@capacitor/preferences';
 import Logout from '../components/Logout.vue';
