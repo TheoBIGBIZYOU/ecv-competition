@@ -4,6 +4,7 @@ import axios from "axios";
 import { ref } from "vue";
 import { useUserStore } from "../store/user";
 import { Preferences } from "@capacitor/preferences";
+import { CapacitorHttp } from "@capacitor/core";
 
 const mail = ref("admin@admin.fr");
 const password = ref("adminadmin");
@@ -15,9 +16,39 @@ const userStore = useUserStore();
 const router = useRouter();
 
 const loginForm = () => {
+  // const options = {
+  //   method: "POST",
+  //   headers: {
+  //     accept: "application/json",
+  //     "Client-Id": import.meta.env.VITE_CLIENT_ID,
+  //     "Client-Secret": import.meta.env.VITE_CLIENT_SECRET,
+  //     "Bridge-Version": "2021-06-01",
+  //     "content-type": "application/json",
+  //   },
+  //   data: { email: mail.value, password: password.value },
+  // };
+
+  //   fetch('https://api.bridgeapi.io/v2/authenticate', options)
+  //   .then((response) => {
+  //     if (!response.ok) {
+  //       throw new Error("Request failed");
+  //     }
+  //     return response.json();
+  //   })
+  //   .then((data) => {
+  //     userStore.setupAccessToken(data.access_token);
+  //     Preferences.set({
+  //       key: "accessToken",
+  //       value: data.access_token,
+  //     });
+  //     bridgeConnectCheck();
+  //   })
+  //   .catch((error) => {
+  //     console.error(error);
+  //   });
+
   const options = {
     method: "POST",
-    url: "https://api.bridgeapi.io/v2/authenticate",
     headers: {
       accept: "application/json",
       "Client-Id": import.meta.env.VITE_CLIENT_ID,
@@ -25,22 +56,21 @@ const loginForm = () => {
       "Bridge-Version": "2021-06-01",
       "content-type": "application/json",
     },
-    data: { email: mail.value, password: password.value },
+    body: JSON.stringify({ email: mail.value, password: password.value }),
   };
 
-  axios
-    .request(options)
-    .then((response) => {
-      userStore.setupAccessToken(response.data.access_token);
+  fetch("https://api.bridgeapi.io/v2/authenticate", options)
+    .then((response) => response.json())
+    .then((data) => {
+      userStore.setupAccessToken(data.access_token);
       Preferences.set({
         key: "accessToken",
-        value: response.data.access_token,
+        value: data.access_token,
       });
       bridgeConnectCheck();
+      router.push({ name: "Home" });
     })
-    .catch((error) => {
-      console.error(error);
-    });
+    .catch((err) => console.error(err));
 };
 
 function bridgeConnect() {
