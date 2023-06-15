@@ -1,6 +1,6 @@
 <script setup>
 import { useRouter } from "vue-router";
-import axios from "axios";
+// import axios from "axios";
 import { ref } from "vue";
 import { useUserStore } from "../store/user";
 import { Preferences } from "@capacitor/preferences";
@@ -15,40 +15,9 @@ const userStore = useUserStore();
 
 const router = useRouter();
 
-const loginForm = () => {
-  // const options = {
-  //   method: "POST",
-  //   headers: {
-  //     accept: "application/json",
-  //     "Client-Id": import.meta.env.VITE_CLIENT_ID,
-  //     "Client-Secret": import.meta.env.VITE_CLIENT_SECRET,
-  //     "Bridge-Version": "2021-06-01",
-  //     "content-type": "application/json",
-  //   },
-  //   data: { email: mail.value, password: password.value },
-  // };
-
-  //   fetch('https://api.bridgeapi.io/v2/authenticate', options)
-  //   .then((response) => {
-  //     if (!response.ok) {
-  //       throw new Error("Request failed");
-  //     }
-  //     return response.json();
-  //   })
-  //   .then((data) => {
-  //     userStore.setupAccessToken(data.access_token);
-  //     Preferences.set({
-  //       key: "accessToken",
-  //       value: data.access_token,
-  //     });
-  //     bridgeConnectCheck();
-  //   })
-  //   .catch((error) => {
-  //     console.error(error);
-  //   });
-
+const loginForm = async () => {
   const options = {
-    method: "POST",
+    url: "https://api.bridgeapi.io/v2/authenticate",
     headers: {
       accept: "application/json",
       "Client-Id": import.meta.env.VITE_CLIENT_ID,
@@ -56,26 +25,39 @@ const loginForm = () => {
       "Bridge-Version": "2021-06-01",
       "content-type": "application/json",
     },
-    body: JSON.stringify({ email: mail.value, password: password.value }),
+    data: { email: mail.value, password: password.value },
   };
 
-  fetch("https://api.bridgeapi.io/v2/authenticate", options)
-    .then((response) => response.json())
-    .then((data) => {
-      userStore.setupAccessToken(data.access_token);
-      Preferences.set({
-        key: "accessToken",
-        value: data.access_token,
-      });
-      bridgeConnectCheck();
-      router.push({ name: "Home" });
-    })
-    .catch((err) => console.error(err));
+  const response = await CapacitorHttp.post(options);
+
+  if (response.status === 200) {
+    userStore.setupAccessToken(response.data.access_token);
+    Preferences.set({
+      key: "accessToken",
+      value: response.data.access_token,
+    });
+    bridgeConnectCheck();
+  } else {
+    console.log("ERROR Request FAIL");
+  }
+
+  //   axios
+  //     .request(options)
+  //     .then((response) => {
+  //       userStore.setupAccessToken(response.data.access_token);
+  //       Preferences.set({
+  //         key: "accessToken",
+  //         value: response.data.access_token,
+  //       });
+  //       bridgeConnectCheck();
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
 };
 
-function bridgeConnect() {
+const bridgeConnect = async () => {
   const options = {
-    method: "POST",
     url: "https://api.bridgeapi.io/v2/connect/items/add",
     headers: {
       accept: "application/json",
@@ -88,19 +70,26 @@ function bridgeConnect() {
     data: { prefill_email: mail.value, redirect_url: home },
   };
 
-  axios
-    .request(options)
-    .then(function (response) {
-      window.location.href = response.data.redirect_url;
-    })
-    .catch(function (error) {
-      console.error(error);
-    });
-}
+  const response = await CapacitorHttp.post(options);
 
-function bridgeConnectCheck() {
+  if (response.status === 200) {
+    window.location.href = response.data.redirect_url;
+  } else {
+    console.log("ERROR Request FAIL");
+  }
+
+  // axios
+  //   .request(options)
+  //   .then(function (response) {
+  //     window.location.href = response.data.redirect_url;
+  //   })
+  //   .catch(function (error) {
+  //     console.error(error);
+  //   });
+};
+
+const bridgeConnectCheck = async () => {
   const options = {
-    method: "GET",
     url: "https://api.bridgeapi.io/v2/items",
     params: { limit: "50" },
     headers: {
@@ -112,23 +101,39 @@ function bridgeConnectCheck() {
     },
   };
 
-  axios
-    .request(options)
-    .then(function (response) {
-      if (response.data.resources.length === 0) {
-        bridgeConnect();
-      } else {
-        Preferences.set({
-          key: "linkBank",
-          value: true,
-        });
-        router.push({ name: "Home" });
-      }
-    })
-    .catch(function (error) {
-      console.error(error);
-    });
-}
+  const response = await CapacitorHttp.get(options);
+
+  if (response.status === 200) {
+    if (response.data.resources.length === 0) {
+      bridgeConnect();
+    } else {
+      Preferences.set({
+        key: "linkBank",
+        value: true,
+      });
+      router.push({ name: "Home" });
+    }
+  } else {
+    console.log("ERROR Request FAIL");
+  }
+
+  // axios
+  //   .request(options)
+  //   .then(function (response) {
+  //     if (response.data.resources.length === 0) {
+  //       bridgeConnect();
+  //     } else {
+  //       Preferences.set({
+  //         key: "linkBank",
+  //         value: true,
+  //       });
+  //       router.push({ name: "Home" });
+  //     }
+  //   })
+  //   .catch(function (error) {
+  //     console.error(error);
+  //   });
+};
 </script>
 
 <template>
