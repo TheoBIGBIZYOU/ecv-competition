@@ -4,6 +4,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import HomePage from '../views/HomePage.vue';
 import RegisterScreen from '../views/RegisterScreen.vue';
 import LoginScreen from '../views/LoginScreen.vue';
+import TransactionScreen from '../views/TransactionScreen.vue';
 
 const routes = [
     {
@@ -20,6 +21,11 @@ const routes = [
         path: '/login',
         name: 'Login',
         component: LoginScreen
+    },
+    {
+        path: '/transaction',
+        name: 'Transaction',
+        component: TransactionScreen
     },
 ]
 
