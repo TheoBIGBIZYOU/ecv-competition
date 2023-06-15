@@ -3,13 +3,20 @@
 import axios from 'axios';
 import {useUserStore} from "../store/user.js";
 import {useTransactionsStore} from "../store/transactions.js";
+import { Preferences } from '@capacitor/preferences';
 import {onBeforeMount} from "vue";
 
 const userStore = useUserStore();
 const transactionsStore = useTransactionsStore();
 
-onBeforeMount(() => {
-  function transation (){
+const accessToken = async () => {
+  const { value } = await Preferences.get({ key: 'accessToken' })
+  transaction(value)
+}
+
+accessToken();
+
+  const transaction = (token) => {
     const options = {
       method: 'GET',
       url: 'https://api.bridgeapi.io/v2/transactions',
@@ -18,7 +25,7 @@ onBeforeMount(() => {
         accept: 'application/json',
         'Client-Id': import.meta.env.VITE_CLIENT_ID,
         'Client-Secret': import.meta.env.VITE_CLIENT_SECRET,
-        Authorization: `Bearer ${userStore.accessToken}`,
+        Authorization: `Bearer ${token}`,
         'Bridge-Version': '2021-06-01',
         'Accept-Language': 'FR',
       }
@@ -33,7 +40,7 @@ onBeforeMount(() => {
           })
           // console.log(response.data.resources);
           setTimeout((function (){
-            transactionsStore.setupTransations(response.data.resources);
+            transactionsStore.setupTransactions(response.data.resources);
           }),100)
         })
         .catch(function (error) {
@@ -64,9 +71,6 @@ onBeforeMount(() => {
           console.error(error);
         });
   }
-
-  transation();
-});
 
 </script>
 

@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia'
 
-export const useTransactionsStore = defineStore('transations', {
+export const useTransactionsStore = defineStore('transactions', {
     state: () => ({
         transactions: [],
         categories : []
     }),
     actions: {
-        setupTransations(transactions) {
+        setupTransactions(transactions) {
             this.transactions = Array.from(transactions)
             this.updateCatArray(this.categories, this.transactions);
         },
