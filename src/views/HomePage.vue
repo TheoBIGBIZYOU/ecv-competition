@@ -3,22 +3,23 @@ import { useRouter } from "vue-router";
 import axios from "axios";
 import { useUserStore } from "../store/user";
 import { Preferences } from '@capacitor/preferences';
+import Logout from '../components/Logout.vue';
 
 import { ref, onMounted } from "vue";
 
 const userStore = useUserStore();
 
 const router = useRouter();
-
-const getAccessToken = ref(false);
+const accessTokenKey = ref('');
 const getBankLink = ref(false);
 
 const checkHomeAccess = (accessToken) => {
-  accessToken == null ? router.push({ name: "Login" }) : getAccessToken.value = true;
+  accessToken == null ? router.push({ name: "Login" }) : '';
 }
 
 const accessToken = async () => {
   const { value } = await Preferences.get({ key: 'accessToken' })
+  accessTokenKey.value = value;
   checkHomeAccess(value);
 }
 
@@ -30,13 +31,6 @@ const getCheckBank = async () => {
 };
 
 getCheckBank();
-
-const logout = () => {
-  Preferences.remove({ key: 'accessToken' });
-  Preferences.remove({ key: 'linkBank' });
-  getAccessToken.value = false;
-  checkHomeAccess(null);
-}
 
 onMounted(() => {
   accessToken()
@@ -51,5 +45,5 @@ onMounted(() => {
   <div v-else>
     <h2>Connectez votre compte à votre banque.</h2>
   </div>
-  <button @click="logout">Logout</button>
+  <Logout @update-access-token="checkHomeAccess" :accesstoken="accessTokenKey" />
 </template>
