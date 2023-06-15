@@ -13,7 +13,7 @@ onBeforeMount(() => {
     const options = {
       method: 'GET',
       url: 'https://api.bridgeapi.io/v2/transactions',
-      params: {limit: 5},
+      params: {limit: 50},
       headers: {
         accept: 'application/json',
         'Client-Id': import.meta.env.VITE_CLIENT_ID,
@@ -73,6 +73,7 @@ onBeforeMount(() => {
 <template>
   <h1>Transaction User</h1>
   <ul>
+    {{transactionsStore.categories}}
     <li v-for="item in transactionsStore.transactions" :key="item.id">
       <p>amount : {{ item.amount }} {{ item.currency_code }} </p>
       <p>date : {{ item.date }}</p>
