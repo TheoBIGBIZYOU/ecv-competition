@@ -1,5 +1,5 @@
 <script setup>
-import axios from "axios";
+import { CapacitorHttp } from "@capacitor/core";
 import { useRouter } from "vue-router";
 import { useUserStore } from "../store/user";
 
@@ -12,9 +12,8 @@ const password = ref("");
 
 const router = useRouter();
 
-const registerForm = () => {
+const registerForm = async () => {
   const options = {
-    method: "POST",
     url: "https://api.bridgeapi.io/v2/users",
     headers: {
       accept: "application/json",
@@ -26,20 +25,17 @@ const registerForm = () => {
     data: { email: mail.value, password: password.value },
   };
 
-  axios
-    .request(options)
-    .then(function (response) {
-      console.log(response.data)
-      authUser(response.data.email, password.value)
-    })
-    .catch(function (error) {
-      console.error(error);
-    });
+  const response = await CapacitorHttp.post(options);
+
+  if (response.status === 200) {
+    authUser(response.data.email, password.value);
+  } else {
+    console.log("ERROR Request FAIL");
+  }
 };
 
-const authUser = (mail, password) => {
+const authUser = async (mail, password) => {
   const options = {
-    method: "POST",
     url: "https://api.bridgeapi.io/v2/authenticate",
     headers: {
       accept: "application/json",
@@ -51,15 +47,14 @@ const authUser = (mail, password) => {
     data: { email: mail, password: password },
   };
 
-  axios
-    .request(options)
-    .then((response) => {
-      userStore.setupAccessToken(response.data.access_token);
-      router.push({ name: "Home" });
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+  const response = await CapacitorHttp.post(options);
+
+  if (response.status === 200) {
+    userStore.setupAccessToken(response.data.access_token);
+    router.push({ name: "Home" });
+  } else {
+    console.log("ERROR Request FAIL");
+  }
 };
 </script>
 

@@ -45,4 +45,5 @@ onMounted(() => {
     <h2>Connectez votre compte à votre banque.</h2>
   </div>
   <Logout @update-access-token="checkHomeAccess" :accesstoken="accessTokenKey" />
+  <router-link to="/transaction">Transactions</router-link>
 </template>

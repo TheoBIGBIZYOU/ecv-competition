@@ -1,6 +1,5 @@
 <script setup>
 import { useRouter } from "vue-router";
-// import axios from "axios";
 import { ref } from "vue";
 import { useUserStore } from "../store/user";
 import { Preferences } from "@capacitor/preferences";
@@ -40,20 +39,6 @@ const loginForm = async () => {
   } else {
     console.log("ERROR Request FAIL");
   }
-
-  //   axios
-  //     .request(options)
-  //     .then((response) => {
-  //       userStore.setupAccessToken(response.data.access_token);
-  //       Preferences.set({
-  //         key: "accessToken",
-  //         value: response.data.access_token,
-  //       });
-  //       bridgeConnectCheck();
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
 };
 
 const bridgeConnect = async () => {
@@ -77,15 +62,6 @@ const bridgeConnect = async () => {
   } else {
     console.log("ERROR Request FAIL");
   }
-
-  // axios
-  //   .request(options)
-  //   .then(function (response) {
-  //     window.location.href = response.data.redirect_url;
-  //   })
-  //   .catch(function (error) {
-  //     console.error(error);
-  //   });
 };
 
 const bridgeConnectCheck = async () => {
@@ -116,23 +92,6 @@ const bridgeConnectCheck = async () => {
   } else {
     console.log("ERROR Request FAIL");
   }
-
-  // axios
-  //   .request(options)
-  //   .then(function (response) {
-  //     if (response.data.resources.length === 0) {
-  //       bridgeConnect();
-  //     } else {
-  //       Preferences.set({
-  //         key: "linkBank",
-  //         value: true,
-  //       });
-  //       router.push({ name: "Home" });
-  //     }
-  //   })
-  //   .catch(function (error) {
-  //     console.error(error);
-  //   });
 };
 </script>
 

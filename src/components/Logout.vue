@@ -1,7 +1,7 @@
 <script setup>
+import { CapacitorHttp } from "@capacitor/core";
 import { Preferences } from "@capacitor/preferences";
-import { getCurrentInstance } from 'vue';
-import axios from "axios";
+import { getCurrentInstance } from "vue";
 
 const props = defineProps({
   accesstoken: String,
@@ -9,12 +9,11 @@ const props = defineProps({
 
 const { emit } = getCurrentInstance();
 
-const logout = () => {
+const logout = async () => {
   Preferences.remove({ key: "accessToken" });
   Preferences.remove({ key: "linkBank" });
 
   const options = {
-    method: "POST",
     url: "https://api.bridgeapi.io/v2/logout",
     headers: {
       accept: "text/plain",
@@ -25,14 +24,13 @@ const logout = () => {
     },
   };
 
-  axios
-    .request(options)
-    .then(function (response) {
-      emit('update-access-token', null);
-    })
-    .catch(function (error) {
-      console.error(error);
-    });
+  const response = await CapacitorHttp.post(options);
+
+  if (response.status === 200) {
+    emit("update-access-token", null);
+  } else {
+    console.log("ERROR Request FAIL");
+  }
 };
 </script>
 
