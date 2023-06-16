@@ -38,6 +38,8 @@ const getCheckBank = async () => {
   if (value) {
     getBankLink.value = true;
   }
+  console.log(value);
+  console.log(getBankLink.value);
 };
 
 getCheckBank();
