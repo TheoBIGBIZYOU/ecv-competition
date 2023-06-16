@@ -10,7 +10,7 @@ import DefineGoal from '../views/DefineGoal.vue';
 
 const routes = [
     {
-        path: '/',
+        path: '/home',
         name: 'Home',
         component: HomePage
     },
@@ -20,7 +20,7 @@ const routes = [
         component: RegisterScreen
     },
     {
-        path: '/login',
+        path: '/',
         name: 'Login',
         component: LoginScreen
     },

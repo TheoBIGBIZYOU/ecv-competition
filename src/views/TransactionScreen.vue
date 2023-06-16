@@ -121,7 +121,7 @@ function openMenuSelect(){
       <h2>Selectionnez une catégorie</h2>
       <select v-model="selectedCategory">
         <option value="">Sélectionnez une catégorie</option>
-        <option v-for="cat in transactionsStore.categories" :value="cat">{{cat}}</option>
+        <option v-for="(cat, i) in transactionsStore.categories" :value="cat" :key="i">{{cat}}</option>
       </select>
     </div>
     <div class="transactions_header">

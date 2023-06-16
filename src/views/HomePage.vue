@@ -20,7 +20,7 @@ const checkHomeAccess = (accessToken) => {
   accessToken == null ? router.push({ name: "Login" }) : "";
 };
 
-const getGoal = async (access) => {
+const getGoal = async () => {
   const value = await Preferences.get({ key: "goal" });
   goalNumber.value = value.value;
   purcentGoal.value = (totalEmission.value / goalNumber.value) * 100;
@@ -30,7 +30,7 @@ const accessToken = async () => {
   const { value } = await Preferences.get({ key: "accessToken" });
   accessTokenKey.value = value;
   checkHomeAccess(value);
-  getGoal(value);
+  getGoal();
 };
 
 const getCheckBank = async () => {
