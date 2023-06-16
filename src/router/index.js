@@ -7,6 +7,7 @@ import LoginScreen from '../views/LoginScreen.vue';
 import TransactionScreen from '../views/TransactionScreen.vue';
 import TransactionDetails from '../views/transaction/_id.vue';
 import DefineGoal from '../views/DefineGoal.vue';
+import QuestionnaireScreen from '../views/QuestionnaireScreen.vue';
 
 const routes = [
     {
@@ -37,6 +38,11 @@ const routes = [
         path: '/define-goal',
         name: 'DefineGoal',
         component: DefineGoal
+    },
+    {
+        path: '/questionnaire',
+        name: 'Questionnaire',
+        component: QuestionnaireScreen
     }
 ]
 

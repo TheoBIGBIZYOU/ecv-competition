@@ -120,6 +120,7 @@ const getCategories = async (idCateg, e) => {
       </div>
     </div>
   </div>
+  <Menu />
 </template>
 
 <style lang="scss">

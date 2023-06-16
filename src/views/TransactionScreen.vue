@@ -171,6 +171,7 @@ function openMenuSelect(){
       </div>
     </div>
   </div>
+  <Menu />
 </template>
 
 <style lang="scss">

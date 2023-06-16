@@ -90,6 +90,7 @@ function goToTransaction() {
     :accesstoken="accessTokenKey"
   />
   <p @click="goToTransaction()">transaction</p>
+  <Menu />
 </template>
 
 

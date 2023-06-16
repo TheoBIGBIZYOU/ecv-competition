@@ -86,6 +86,7 @@ const closeStories = () => {
   overflow-y: hidden;
   position: relative;
   width: 100%;
+  z-index: 10;
   .storie {
     padding: 60px 24px 24px;
     min-width: 100%;
