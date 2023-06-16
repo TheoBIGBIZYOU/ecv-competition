@@ -12,6 +12,10 @@ const { emit } = getCurrentInstance();
 const logout = async () => {
   Preferences.remove({ key: "accessToken" });
   Preferences.remove({ key: "linkBank" });
+  Preferences.set({
+    key: "goal",
+    value: 0
+  });
 
   const options = {
     url: "https://api.bridgeapi.io/v2/logout",

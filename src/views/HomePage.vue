@@ -13,6 +13,8 @@ const accessTokenKey = ref("");
 const getBankLink = ref(false);
 const monthGoal = ref(false);
 const goalNumber = ref(0);
+const totalEmission = ref(128.8);
+const purcentGoal = ref(0);
 
 const checkHomeAccess = (accessToken) => {
   accessToken == null ? router.push({ name: "Login" }) : "";
@@ -20,23 +22,8 @@ const checkHomeAccess = (accessToken) => {
 
 const getGoal = async (access) => {
   const value = await Preferences.get({ key: "goal" });
-  const data = JSON.parse(value.value);
-  goalNumber.value = data.number;
-
-  console.log(data.accessToken);
-  console.log(access);
-
-  if (data.accessToken === access) {
-    goalNumber.value = data.number;
-  } else {
-    Preferences.set({
-      key: "goal",
-      value: JSON.stringify({
-        accessToken: null,
-        number: 0,
-      }),
-    });
-  }
+  goalNumber.value = value.value;
+  purcentGoal.value = (totalEmission.value / goalNumber.value) * 100;
 };
 
 const accessToken = async () => {
@@ -59,9 +46,8 @@ const defineGoal = () => {
   router.push({ name: "DefineGoal" });
 };
 
-onMounted(() => {
-  accessToken();
-});
+accessToken();
+
 </script>
 
 <template>
@@ -84,10 +70,14 @@ onMounted(() => {
       </div>
     </div>
     <div v-else>
-      Objectif : {{ goalNumber }}
+      <h2>Mon objectif du mois : {{ goalNumber }}g CO2</h2>
+      <div class="progressBar">
+        <div class="progressBar__progress" :style="{width: purcentGoal.toFixed(2) + '%'}">{{ totalEmission }}kg CO2</div>
+      </div>
       <div class="define__goal" @click="defineGoal">Modifier mon objectif</div>
     </div>
-    <h2>Compte lié à une banque</h2>
+    <h2>Les émissions de CO2 de vos dépenses du mois</h2>
+    <p>{{ totalEmission }}kg CO2</p>
   </div>
   <Logout
     @update-access-token="checkHomeAccess"
@@ -95,3 +85,17 @@ onMounted(() => {
   />
   <router-link to="/transaction">Transactions</router-link>
 </template>
+
+
+<style scoped>
+  .progressBar {
+    background-color: #D9D9D9;
+  }
+  .progressBar__progress {
+    background-color: #505050;
+    padding: 5px 10px;
+    text-align: right;
+    color: #fff;
+    max-width: 100%;
+  }
+</style>

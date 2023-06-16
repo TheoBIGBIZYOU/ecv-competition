@@ -11,10 +11,7 @@ const accessTokenKey = ref('');
 const defineGoal = (token) => {
   Preferences.set({
     key: "goal",
-    value: JSON.stringify({
-      accessToken: token,
-      number: goalNumber.value
-    }),
+    value: goalNumber.value
   });
   router.push({ name: "Home" })
 }
@@ -27,8 +24,7 @@ const accessToken = async () => {
 
 const getGoal = async () => {
   const value = await Preferences.get({ key: "goal" });
-  const data = JSON.parse(value.value);
-  goalNumber.value = data.number;
+  goalNumber.value = value.value;
 };
 
 getGoal();
@@ -38,7 +34,7 @@ getGoal();
 <template>
   <h1>CO2 Goal</h1>
   <form @submit.prevent="accessToken">
-    <input type="number" id="goal" v-model="goalNumber" placeholder="0"/>
+    <input type="number" id="goal" v-model="goalNumber" required min="1"/>
     <p>Je définis mon objectif à {{ goalNumber }} g CO2</p>
     <button type="submit">Valider mon objectif</button>
   </form>
