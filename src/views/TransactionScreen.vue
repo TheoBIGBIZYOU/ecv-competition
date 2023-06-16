@@ -30,7 +30,7 @@ accessToken();
 const transaction = async (token) => {
   const options = {
     url: "https://api.bridgeapi.io/v2/transactions",
-    params: { limit: 50 },
+    params: { limit: '50' },
     headers: {
       accept: "application/json",
       "Client-Id": import.meta.env.VITE_CLIENT_ID,
