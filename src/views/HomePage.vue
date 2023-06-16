@@ -48,6 +48,10 @@ const defineGoal = () => {
 
 accessToken();
 
+function goToTransaction() {
+  router.push({ name: "Transaction" });
+}
+
 </script>
 
 <template>
@@ -83,7 +87,7 @@ accessToken();
     @update-access-token="checkHomeAccess"
     :accesstoken="accessTokenKey"
   />
-  <router-link to="/transaction">Transactions</router-link>
+  <p @click="goToTransaction()">transaction</p>
 </template>
 
 
