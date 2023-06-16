@@ -83,10 +83,11 @@ const bridgeConnectCheck = async () => {
     if (response.data.resources.length === 0) {
       bridgeConnect();
     } else {
-      Preferences.set({
+      await Preferences.set({
         key: "linkBank",
         value: true,
       });
+      console.log("test");
       router.push({ name: "Home" });
     }
   } else {
