@@ -84,7 +84,8 @@ const closeStories = () => {
   scroll-snap-type: x mandatory;
   overflow-x: scroll;
   overflow-y: hidden;
-  position: relative;
+  position: fixed;
+  top: 0;
   width: 100%;
   z-index: 10;
   .storie {
