@@ -1,5 +1,6 @@
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import { Preferences } from "@capacitor/preferences";
 
 const datas = [
   {
@@ -7,7 +8,7 @@ const datas = [
     title: "L’empreinte carbone c’est quoi ?",
     description:
       "L’empreinte carbone est un indicateur qui permet de mesurer l’impact de l'activité humaine sur l’environnement en se basant sur les émissions de gaz à effet de serre. Le CO2, ou dioxyde de carbone, est le gaz à effet de serre le plus connu de tous, il est émis lors de la combustion d’énergies fossiles (pétrole, gaz, charbon).<br>Par exemple lorsque nous utilisons notre voiture ou prenons le bus pour nous déplacer, nous participons tous à la libération d'une certaine quantité de CO2 dans l'atmosphère. Ces gaz s’accumulent et conduisent à ce que l’on nomme l’effet de serre, responsable du réchauffement climatique.",
-    image: "fff",
+    image: "first",
     link: false,
   },
   {
@@ -15,7 +16,7 @@ const datas = [
     title: "Pourquoi calculer son empreinte carbone ?",
     description:
       "Le réchauffement global de la planète s’accélére et pourrait dépasser les +4 degrés (par rapport au niveau de 1990) en 2100 si nous ne changeons pas nos façons de vivre. Mais, comment savoir par quoi commencer ?<br>Chacun peut agir à son niveau en calculant ses propres émissions de gaz à effet de serre : un individu, une entreprise, un état.<br>Un premier pas pour comprendre la manière dont nos habitudes de consommations sont liées aux émissions de co2.",
-    image: "fff",
+    image: "second",
     link: false,
   },
   {
@@ -23,11 +24,12 @@ const datas = [
     title: "Pourquoi ma banque m’accompagne dans cette démarche ?",
     description:
       "Nous sommes particulièrement sensibles à l’impact de nos activités bancaires sur l’environnement.<br>Nos derniers engagements :<br>L’intégralité de nos investissements et une partie de nos bénéfices, sont alloués à des projets concrets alignés avec la transition vers une économie plus bas carbone.<br>Nous proposons à nos salariés de limiter l’empreinte carbone liée à leurs déplacements en généralisant le télétravail à 3 jours / semaines. <br>Faisons ce premier pas ensemble.<br>Nous allons vous poser quelques questions afin d’estimer votre empreinte carbone annuelle.",
-    image: "",
+    image: null,
     link: true,
   },
 ];
 
+const alreadySee = ref(false);
 const sliderContainer = ref(null);
 const visible = ref(true);
 
@@ -41,13 +43,22 @@ const next = () => {
 
 const closeStories = () => {
   visible.value = false;
+  Preferences.set({
+    key: "storyAlreadySee",
+    value: true
+  });
 };
+
+onMounted(async () => {
+  const { value } = await Preferences.get({ key: "storyAlreadySee" });
+  alreadySee.value = value;
+})
 </script>
 
 <template>
-  <section id="stories" ref="sliderContainer" v-show="visible">
-    <article v-for="(data, i) in datas" :key="i" class="storie">
-      <div :class="'storie__steps storie__steps' + i">
+  <section id="stories" ref="sliderContainer" v-if="!alreadySee" v-show="visible">
+    <article v-for="(data, i) in datas" :key="i" class="story">
+      <div :class="'story__steps story__steps' + i">
         <span v-for="(data, i) in datas" :key="'step ' + i"></span>
       </div>
       <div class="preheader">
@@ -72,6 +83,9 @@ const closeStories = () => {
       <h1>{{ data.title }}</h1>
       <p v-html="data.description"></p>
       <button v-if="data.link" @click="closeStories" class="connectBtn">Je me connecte</button>
+      <div v-if="data.image !== null" class="story_img">
+          <img :src="'/src/assets/img/stories/' + data.image + '.svg'">
+      </div>
     </article>
     <div @click="prev" class="touchableNav touchableLeft"></div>
     <div @click="next" class="touchableNav touchableRight"></div>
@@ -88,12 +102,13 @@ const closeStories = () => {
   top: 0;
   width: 100%;
   z-index: 10;
-  .storie {
+  .story {
     padding: 60px 24px 24px;
     min-width: 100%;
     min-height: 100vh;
     color: #fff;
     scroll-snap-align: start;
+    position: relative;
     &:nth-of-type(odd) {
       background-color: var(--blue);
     }
@@ -121,6 +136,8 @@ const closeStories = () => {
 
     h1 {
       margin-bottom: 12px;
+      font-size: 32px;
+      line-height: 40px;
     }
 
     &__steps {
@@ -159,6 +176,12 @@ const closeStories = () => {
         color: #fff;
         background-color: var(--black);
         border: 0px;
+    }
+
+    &_img {
+      position: absolute;
+      bottom: 0;
+      right: 0;
     }
   }
   .touchableNav {

@@ -223,7 +223,7 @@ const noAccount = () => {
     }
   }
   .noAccount {
-    margin-top: 1rem;
+    margin-top: 32px;
     text-align: center;
     font-weight: 700;
     text-decoration: underline;
