@@ -324,7 +324,7 @@ const tips = [
     &_cards {
       &_total {
         position: relative;
-        padding: 3%;
+        padding: 24px;
         background-color: #1066ff;
         border-radius: 10px;
         p {
@@ -390,20 +390,10 @@ const tips = [
           }
         }
         button {
-          display: block;
-          margin-inline: auto;
           margin-top: 15px;
-          width: 100%;
-          font-weight: 700;
-          text-align: left;
-          font-size: 14px;
-          padding: 3%;
-          border-radius: 8px;
           color: var(--black);
           background-color: white;
           box-shadow: 0px 8px 40px rgba(0, 0, 0, 0.05);
-          border: none;
-          border-radius: 8px;
         }
       }
 
