@@ -122,7 +122,7 @@ const noAccount = () => {
                 :type="showPassword ? 'text' : 'password'"
                 v-model="password"
               />
-              <button @click.prevent="showPassword = !showPassword">
+              <button class="showPassword" @click.prevent="showPassword = !showPassword">
                 <svg
                   width="16"
                   height="14"

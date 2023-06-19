@@ -39,7 +39,7 @@ body {
   justify-content: center;
 }
 
-button {
+button:not(.showPassword) {
   display: block;
   margin-inline: auto;
   width: 100%;
