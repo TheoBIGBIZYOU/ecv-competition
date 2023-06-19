@@ -6,6 +6,7 @@ import Logout from "../components/Logout.vue";
 import Menu from "../components/Menu.vue";
 
 import { ref, onMounted } from "vue";
+import Button from "../components/Button.vue";
 
 const userStore = useUserStore();
 
@@ -43,28 +44,11 @@ const getCheckBank = async () => {
 
 getCheckBank();
 
-const defineGoal = () => {
-  router.push({ name: "DefineGoal" });
-};
-
 accessToken();
 
-function goToTransaction() {
-  router.push({ name: "Transaction" });
+function goTo(url){
+  router.push({ name: url });
 }
-
-const buttons = [
-  {
-    title: "Répondre au questionnaire",
-    subtitle: "8 minutes",
-    image: "questionnaire.svg",
-  },
-  {
-    title: "Lier mon compte à mes dépenses",
-    subtitle: "",
-    image: "link_account.svg",
-  },
-];
 
 const tips = [
   {
@@ -100,8 +84,14 @@ const tips = [
           <p class="subtitle">Fleur</p>
         </div>
       </div>
-      <div class="homepage_header_notif">
-        <img src="../assets/img/notif.svg" alt="" />
+      <div class="homepage_header_right">
+        <div class="homepage_header_right_notif">
+          <img src="../assets/img/notif.svg" alt="" />
+        </div>
+        <div class="homepage_header_right_objectif">
+          <p>15</p>
+          <div class="circle"></div>
+        </div>
       </div>
     </section>
     <section class="homepage_empreinte">
@@ -115,9 +105,7 @@ const tips = [
           </p>
         </div>
         <div class="homepage_empreinte_cards_goal">
-          <button @click="defineGoal">
-            Je définis mon objectif du mois
-          </button>
+          <Button label="Je définis mon objectif du mois" url="DefineGoal"/>
         </div>
       </div>
       <div class="homepage_empreinte_cards goalDefined" v-else>
@@ -130,7 +118,7 @@ const tips = [
               </div>
               <div class="rest">
                 <span class="label">Il ne te reste plus que</span>
-                <span class="value">120 Kg</span>
+                <span class="value">{{ goalNumber - totalEmission }} Kg</span>
               </div>
             </div>
             <div class="progressBar">
@@ -139,36 +127,46 @@ const tips = [
                 :style="{ width: purcentGoal.toFixed(2) + '%' }"
               ></div>
             </div>
-            <button @click="defineGoal">Je modifie mon objectif du mois</button>
+            <Button label="Je modifie mon objectif du mois" url="DefineGoal" textAlign="left"/>
           </div>
         </div>
         <div class="homepage_empreinte_cards_total card__wave">
           <p>
             <span>{{ totalEmission }}</span> kg(s) de CO2
           </p>
-          <button>Voir les dépenses du mois</button>
+          <Button label="Voir les dépenses du mois" url="Transaction"/>
         </div>
       </div>
     </section>
     <section class="homepage_buttons">
       <div class="homepage_buttons_list">
         <div
-          v-for="(item, i) in buttons"
-          :key="i"
           class="homepage_buttons_list_item"
         >
           <div class="homepage_buttons_list_item_image">
-            <img :src="`../assets/img/${item.image}`" alt="" />
+            <img src="../assets/img/questionnaire.svg" alt="" />
           </div>
           <div class="homepage_buttons_list_item_info">
             <div class="homepage_buttons_list_item_info_title">
-              <p>{{ item.title }}</p>
+              <p>Répondre au questionnaire</p>
             </div>
             <div
-              v-if="item.subtitle !== ''"
               class="homepage_buttons_list_item_info_subtitle"
             >
-              <p>{{ item.subtitle }}</p>
+              <p>8 minutes</p>
+            </div>
+          </div>
+        </div>
+        <div
+            v-if="!getBankLink"
+            class="homepage_buttons_list_item"
+        >
+          <div class="homepage_buttons_list_item_image">
+            <img src="../assets/img/link_account.svg" alt="" />
+          </div>
+          <div class="homepage_buttons_list_item_info">
+            <div class="homepage_buttons_list_item_info_title">
+              <p>Lier mon compte à mes dépenses</p>
             </div>
           </div>
         </div>
@@ -196,8 +194,7 @@ const tips = [
               <p>{{ item.subtitle }}</p>
             </div>
             <div class="homepage_tips_content_list_item_button">
-              <!--              dans le @click ajouter : goTo(item.url) et faire la fonction-->
-              <button>{{ item.buttonLabel }}</button>
+              <Button :label="item.buttonLabel" :url="item.url" noArrow='true'/>
             </div>
           </div>
         </div>
@@ -293,7 +290,6 @@ const tips = [
         align-items: center;
         justify-content: center;
         border-radius: 23px;
-        border: 0.93px dashed;
 
         img {
           width: 100%;
@@ -308,6 +304,31 @@ const tips = [
           font-size: 16px;
           color: var(--black);
           font-weight: 700;
+        }
+      }
+    }
+    &_right{
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      &_objectif{
+        background: linear-gradient(180deg, #FF8D07 0%, #FFE24D 100%);
+        width: 25px;
+        height: 25px;
+        border-radius: 100vmax;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        p{
+          color: white;
+        }
+        .circle{
+          width: 32px;
+          height: 32px;
+          background-color: transparent;
+          border: 1px solid #FFE14B;
+          border-radius: 100vmax;
+          position: absolute;
         }
       }
     }
@@ -327,6 +348,10 @@ const tips = [
         padding: 24px;
         background-color: #1066ff;
         border-radius: 10px;
+
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
         p {
           font-size: 16px;
           color: white;
@@ -334,9 +359,6 @@ const tips = [
           span {
             font-size: 40px;
           }
-        }
-        button {
-           background: #fff;
         }
       }
       &_goal {
@@ -367,33 +389,6 @@ const tips = [
               }
             }
           }
-          button {
-            all: unset;
-            padding-top: 16px;
-            border-top: 1px solid #eff5ff;
-            width: 100%;
-            position: relative;
-
-            &::after {
-              content: "";
-              width: 6px;
-              height: 11px;
-              position: absolute;
-              right: 0;
-              top: 20px;
-              display: block;
-              background-size: contain;
-              background-repeat: no-repeat;
-              background-position: center;
-              background: url('data:image/svg+xml,<svg width="6" height="11" viewBox="0 0 6 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.66821 5.29272L0.275681 8.68525C-0.0918939 9.05282 -0.0918939 9.64947 0.275681 10.017C0.643257 10.3846 1.2399 10.3846 1.60748 10.017L5.70408 5.92044C6.05123 5.57329 6.05123 5.01127 5.70408 4.665L1.60748 0.568406C1.2399 0.20083 0.643256 0.20083 0.275681 0.568406C-0.0918942 0.935981 -0.0918942 1.53262 0.275681 1.9002L3.66821 5.29272Z" fill="%23C2C3CA"/></svg>');
-            }
-          }
-        }
-        button {
-          margin-top: 15px;
-          color: var(--black);
-          background-color: white;
-          box-shadow: 0px 8px 40px rgba(0, 0, 0, 0.05);
         }
       }
 
@@ -413,6 +408,7 @@ const tips = [
         display: flex;
         gap: 1rem;
         padding: 15px;
+        position: relative;
         &_image {
           width: 40px;
           height: 40px;
@@ -444,6 +440,20 @@ const tips = [
         }
         &:not(:last-child) {
           border-bottom: 1px solid #efefef;
+        }
+        &::after {
+          content: "";
+          width: 6px;
+          height: 11px;
+          position: absolute;
+          right: 20px;
+          top: 50%;
+          transform: translateY(-50%);
+          display: block;
+          background-size: contain;
+          background-repeat: no-repeat;
+          background-position: center;
+          background: url('data:image/svg+xml,<svg width="6" height="11" viewBox="0 0 6 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.66821 5.29272L0.275681 8.68525C-0.0918939 9.05282 -0.0918939 9.64947 0.275681 10.017C0.643257 10.3846 1.2399 10.3846 1.60748 10.017L5.70408 5.92044C6.05123 5.57329 6.05123 5.01127 5.70408 4.665L1.60748 0.568406C1.2399 0.20083 0.643256 0.20083 0.275681 0.568406C-0.0918942 0.935981 -0.0918942 1.53262 0.275681 1.9002L3.66821 5.29272Z" fill="%23C2C3CA"/></svg>');
         }
       }
     }
@@ -490,14 +500,6 @@ const tips = [
             font-weight: 400;
             font-size: 14px;
             margin-bottom: 25px;
-          }
-          &_button {
-            button {
-              margin-top: 15px;
-              color: var(--black);
-              background-color: white;
-              box-shadow: 0px 8px 40px rgba(0, 0, 0, 0.05);
-            }
           }
         }
       }
