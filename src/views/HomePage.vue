@@ -115,10 +115,9 @@ const tips = [
           </p>
         </div>
         <div class="homepage_empreinte_cards_goal">
-          <button @click="defineGoal" v-if="goalNumber === '0'">
+          <button @click="defineGoal">
             Je définis mon objectif du mois
           </button>
-          <button @click="defineGoal">Je modifie mon objectif du mois</button>
         </div>
       </div>
       <div class="homepage_empreinte_cards goalDefined" v-else>
