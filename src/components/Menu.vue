@@ -36,6 +36,8 @@ const goTo = (href) => {
   bottom: 0;
   left: 0;
   width: 100%;
+  background-color: white;
+  padding: 25px 0;
   nav{
     width: 80%;
     margin: 0 auto;
