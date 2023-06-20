@@ -103,7 +103,6 @@ const filterTransaction = (transactions, impactArray) => {
 const getGoal = async () => {
   const value = await Preferences.get({ key: "goal" });
   goalNumber.value = value.value;
-  console.log(totalEmission.value)
   purcentGoal.value = (totalEmission.value / goalNumber.value) * 100;
   restEmission.value = goalNumber.value - totalEmission.value;
 };
