@@ -114,6 +114,7 @@ const goToSingleTransac = (id) => {
 
 function totalEmission(){
   let total = 0;
+  console.log(document.querySelector("body"))
   let tabEmission = document.querySelectorAll("#totalempreinteC");
   tabEmission.forEach((e,index) => {
     total += parseFloat(e.innerHTML);
@@ -128,6 +129,7 @@ function toDepense(depense){
 function searchDepense(depenses, value){
   return depenses.filter(p => toDepense(p).includes(value.toLowerCase()));
 }
+
 watch(search, (newValue , oldValue)=>{
   state.depenses = computed(()=> searchDepense(transactionsStore.transactions,newValue));
   totalEmission();
@@ -182,7 +184,7 @@ const listTransactions = [
       </div>
     </div>
     <div class="transactions_list">
-      <div class="transactions_list_items" v-for="list in listTransactions">
+      <div class="transactions_list_items" v-for="(list, i) in listTransactions" :key="i">
         <h2>{{list.title}}</h2>
         <ul>
           <li class="transactions_list_items_item" v-for="item in list.arrayTransaction" :key="item.id" @click="goToSingleTransac(item.id)">
@@ -255,7 +257,6 @@ const listTransactions = [
     z-index: 2;
     overflow: hidden;
     background-color: white;
-    box-shadow: 0px 8px 40px rgba(0, 0, 0, 0.05);
     &_title{
       h1{
         font-weight: 600;
@@ -274,7 +275,7 @@ const listTransactions = [
         border: none;
         width: 80%;
         position: relative;
-        padding-left: 50px;
+        padding-left: 40px;
         &::placeholder{
           font-weight: 400;
           font-size: 18px;
@@ -283,18 +284,17 @@ const listTransactions = [
       }
       &::after {
         content: "";
-        width: 30px;
-        height: 30px;
+        width: 13px;
+        height: 13px;
         position: absolute;
         left: 15px;
         top: 50%;
         transform: translateY(-50%);
         display: block;
-        background-size: cover;
+        background-size: contain;
         background-repeat: no-repeat;
         background-position: center;
-        background: url("../assets/img/search.svg");
-        //background: url('data:image/svg+xml,<svg width="6" height="11" viewBox="0 0 6 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.66821 5.29272L0.275681 8.68525C-0.0918939 9.05282 -0.0918939 9.64947 0.275681 10.017C0.643257 10.3846 1.2399 10.3846 1.60748 10.017L5.70408 5.92044C6.05123 5.57329 6.05123 5.01127 5.70408 4.665L1.60748 0.568406C1.2399 0.20083 0.643256 0.20083 0.275681 0.568406C-0.0918942 0.935981 -0.0918942 1.53262 0.275681 1.9002L3.66821 5.29272Z" fill="%23C2C3CA"/></svg>');
+        background: url('data:image/svg+xml,<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><mask id="mask0_238_1170" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="14" height="14"><path fill-rule="evenodd" clip-rule="evenodd" d="M0.333252 0.126068H13.3178V13.1107H0.333252V0.126068Z" fill="white"/></mask><g mask="url(%23mask0_238_1170)"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.82584 1.12606C3.79717 1.12606 1.33317 3.58939 1.33317 6.61806C1.33317 9.64672 3.79717 12.1107 6.82584 12.1107C9.85384 12.1107 12.3178 9.64672 12.3178 6.61806C12.3178 3.58939 9.85384 1.12606 6.82584 1.12606M6.82567 13.1107C3.24567 13.1107 0.333008 10.1981 0.333008 6.61807C0.333008 3.03807 3.24567 0.126068 6.82567 0.126068C10.4057 0.126068 13.3177 3.03807 13.3177 6.61807C13.3177 10.1981 10.4057 13.1107 6.82567 13.1107" fill="%23191B1F"/></g><mask id="mask1_238_1170" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="10" y="10" width="4" height="4"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.4934 10.5974H13.8428V13.9405H10.4934V10.5974Z" fill="white"/></mask><g mask="url(%23mask1_238_1170)"><path fill-rule="evenodd" clip-rule="evenodd" d="M13.3429 13.9405C13.2156 13.9405 13.0876 13.8919 12.9896 13.7945L10.6402 11.4519C10.4449 11.2565 10.4442 10.9399 10.6396 10.7445C10.8342 10.5479 11.1509 10.5492 11.3469 10.7432L13.6962 13.0865C13.8916 13.2819 13.8922 13.5979 13.6969 13.7932C13.5996 13.8919 13.4709 13.9405 13.3429 13.9405Z" fill="%23191B1F"/></g></svg>');
       }
       &_filter{
         background: #FFFFFF;
@@ -309,7 +309,8 @@ const listTransactions = [
     }
   }
   &_list{
-    padding-top: 19rem;
+    padding-top: 250px;
+    padding-bottom: 80px;
     ul{
       padding: 0;
       display: flex;

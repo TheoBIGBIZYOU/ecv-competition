@@ -1,0 +1,402 @@
+[
+    {
+      "label": "Gaz Naturel",
+      "impact": 5
+    },
+    {
+      "label": "Ferry Longue Distance",
+      "impact": 3.69
+    },
+    {
+      "label": "Fioul",
+      "impact": 3.3
+    },
+    {
+      "label": "Boucherie",
+      "impact": 2.95
+    },
+    {
+      "label": "Billets d'avion",
+      "impact": 2.62
+    },
+    {
+      "label": "Carburant",
+      "impact": 2.22
+    },
+    {
+      "label": "Animaux",
+      "impact": 1.383
+    },
+    {
+      "label": "Livraison repas",
+      "impact": 1.119
+    },
+    {
+      "label": "Bateau - Autres",
+      "impact": 1.06
+    },
+    {
+      "label": "Mobilité - Autres",
+      "impact": 1.06
+    },
+    {
+      "label": "Co-voiturage",
+      "impact": 1.06
+    },
+    {
+      "label": "Alimentation - Autres",
+      "impact": 0.95
+    },
+    {
+      "label": "Supermarché & épicerie",
+      "impact": 0.924
+    },
+    {
+      "label": "Vêtements & Chaussures d'occasion",
+      "impact": 0.91
+    },
+    {
+      "label": "Vêtements & Chaussures neufs",
+      "impact": 0.91
+    },
+    {
+      "label": "Articles de sport d'occasion",
+      "impact": 0.88
+    },
+    {
+      "label": "Articles de sport neufs",
+      "impact": 0.88
+    },
+    {
+      "label": "Logement - Autres",
+      "impact": 0.86
+    },
+    {
+      "label": "Bazar & Cadeaux",
+      "impact": 0.8
+    },
+    {
+      "label": "Electroménager & High Tech neuf",
+      "impact": 0.794
+    },
+    {
+      "label": "Fromagerie",
+      "impact": 0.757
+    },
+    {
+      "label": "E-commerce généraliste - Produits neufs",
+      "impact": 0.74
+    },
+    {
+      "label": "E-commerce généraliste - Produits d'occasion",
+      "impact": 0.74
+    },
+    {
+      "label": "Extérieur & jardin",
+      "impact": 0.721
+    },
+    {
+      "label": "Fournitures scolaires neuves",
+      "impact": 0.66
+    },
+    {
+      "label": "Fournitures scolaires d'occasion",
+      "impact": 0.66
+    },
+    {
+      "label": "Jouets d'occasion",
+      "impact": 0.65
+    },
+    {
+      "label": "Jouets neufs",
+      "impact": 0.65
+    },
+    {
+      "label": "Restaurants & Fast Food",
+      "impact": 0.627
+    },
+    {
+      "label": "Achats & Shopping - Autres",
+      "impact": 0.626
+    },
+    {
+      "label": "Electroménager & High Tech d'occasion",
+      "impact": 0.567
+    },
+    {
+      "label": "Agence de Voyages / Vacances",
+      "impact": 0.56
+    },
+    {
+      "label": "Pharmacie",
+      "impact": 0.5
+    },
+    {
+      "label": "Décoration & meubles - produits neufs",
+      "impact": 0.5
+    },
+    {
+      "label": "Décoration & meubles - produits d'occasion",
+      "impact": 0.5
+    },
+    {
+      "label": "Poissonnerie",
+      "impact": 0.48
+    },
+    {
+      "label": "Vêtements & chaussures - Upcycling",
+      "impact": 0.45
+    },
+    {
+      "label": "Electricité",
+      "impact": 0.419
+    },
+    {
+      "label": "Ferry Courte Distance",
+      "impact": 0.38
+    },
+    {
+      "label": "Travaux",
+      "impact": 0.375
+    },
+    {
+      "label": "Bois de chauffage",
+      "impact": 0.36
+    },
+    {
+      "label": "Voiture & moto - Autres",
+      "impact": 0.356
+    },
+    {
+      "label": "Cosmétique",
+      "impact": 0.351
+    },
+    {
+      "label": "Retraits",
+      "impact": 0.295
+    },
+    {
+      "label": "Achat vélo / trottinette",
+      "impact": 0.29
+    },
+    {
+      "label": "Fleuristes",
+      "impact": 0.282
+    },
+    {
+      "label": "Sport d'hiver",
+      "impact": 0.27
+    },
+    {
+      "label": "Sport",
+      "impact": 0.27
+    },
+    {
+      "label": "Hobbies",
+      "impact": 0.27
+    },
+    {
+      "label": "Biogaz",
+      "impact": 0.265
+    },
+    {
+      "label": "Vin & liqueurs",
+      "impact": 0.263
+    },
+    {
+      "label": "Loisirs & Sorties - Autres",
+      "impact": 0.25
+    },
+    {
+      "label": "Chèques",
+      "impact": 0.24
+    },
+    {
+      "label": "Santé & Soins - Autres",
+      "impact": 0.234
+    },
+    {
+      "label": "Jeux d'argent",
+      "impact": 0.21
+    },
+    {
+      "label": "Sorties culturelles",
+      "impact": 0.21
+    },
+    {
+      "label": "Spa & Massage",
+      "impact": 0.195
+    },
+    {
+      "label": "Charges diverses",
+      "impact": 0.17
+    },
+    {
+      "label": "Dépenses Professionnelles",
+      "impact": 0.17
+    },
+    {
+      "label": "Entretien",
+      "impact": 0.17
+    },
+    {
+      "label": "Pressing",
+      "impact": 0.17
+    },
+    {
+      "label": "Entretien vélo / trottinette",
+      "impact": 0.17
+    },
+    {
+      "label": "Achat véhicule neuf",
+      "impact": 0.165
+    },
+    {
+      "label": "Bureau de tabax",
+      "impact": 0.155
+    },
+    {
+      "label": "Entretien voiture / moto",
+      "impact": 0.15
+    },
+    {
+      "label": "Livres neufs",
+      "impact": 0.143
+    },
+    {
+      "label": "Achat véhicule occasion",
+      "impact": 0.139
+    },
+    {
+      "label": "V.O.D (vidéo à la demande)",
+      "impact": 0.131
+    },
+    {
+      "label": "Boulangerie",
+      "impact": 0.128
+    },
+    {
+      "label": "Transport en commun",
+      "impact": 0.125
+    },
+    {
+      "label": "Prêt étudiant",
+      "impact": 0.12
+    },
+    {
+      "label": "Crèches",
+      "impact": 0.12
+    },
+    {
+      "label": "Coiffeur",
+      "impact": 0.12
+    },
+    {
+      "label": "Dentiste",
+      "impact": 0.12
+    },
+    {
+      "label": "Opticien / Ophtalmo",
+      "impact": 0.12
+    },
+    {
+      "label": "Frais de scolarité",
+      "impact": 0.12
+    },
+    {
+      "label": "Médecin",
+      "impact": 0.12
+    },
+    {
+      "label": "Esthétique",
+      "impact": 0.12
+    },
+    {
+      "label": "Eau",
+      "impact": 0.115
+    },
+    {
+      "label": "Mobilité douce - Autres",
+      "impact": 0.108
+    },
+    {
+      "label": "CDs & DVDs & Vinyls neufs",
+      "impact": 0.104
+    },
+    {
+      "label": "Achat 2 roues motorisées occasion",
+      "impact": 0.102
+    },
+    {
+      "label": "Achat 2 roues motorisées neuf",
+      "impact": 0.102
+    },
+    {
+      "label": "Location bateau",
+      "impact": 0.1
+    },
+    {
+      "label": "Taxi & Vtc",
+      "impact": 0.1
+    },
+    {
+      "label": "Location d'un véhicule courte durée",
+      "impact": 0.1
+    },
+    {
+      "label": "Hôtels",
+      "impact": 0.1
+    },
+    {
+      "label": "Bar & Clubs",
+      "impact": 0.09
+    },
+    {
+      "label": "Trottinette partagée",
+      "impact": 0.09
+    },
+    {
+      "label": "Péage",
+      "impact": 0.09
+    },
+    {
+      "label": "Banques - Autres",
+      "impact": 0.09
+    },
+    {
+      "label": "Billets de train",
+      "impact": 0.085
+    },
+    {
+      "label": "Achat d'un bateau",
+      "impact": 0.077
+    },
+    {
+      "label": "Hébergement entre particuliers",
+      "impact": 0.076
+    },
+    {
+      "label": "Livres d'occasion",
+      "impact": 0.0715
+    },
+    {
+      "label": "Jeux vidéos",
+      "impact": 0.07
+    },
+    {
+      "label": "Forfait Internet",
+      "impact": 0.065
+    },
+    {
+      "label": "Location d'un véhicule longue durée (leasing)",
+      "impact": 0.0587
+    },
+    {
+      "label": "Maraîcher",
+      "impact": 0.051
+    },
+    {
+      "label": "Baby sitters",
+      "impact": 0.05
+    }
+  ]
