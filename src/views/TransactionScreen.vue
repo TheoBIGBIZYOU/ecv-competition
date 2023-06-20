@@ -1,5 +1,4 @@
 <script setup>
-import { CapacitorHttp } from "@capacitor/core";
 import { useUserStore } from "../store/user.js";
 import { useTransactionsStore } from "../store/transactions.js";
 import { Preferences } from "@capacitor/preferences";
@@ -23,45 +22,14 @@ const state = reactive({
 })
 const search = ref("");
 const totalEmissionValue = ref(0);
-const depenses = ref(transactionsStore.transactions)
+
+const depenses = transactionsStore.transactions
+
+totalEmissionValue.value = depenses.reduce((total, transaction) => total + transaction.impact, 0);
+
+
+
 const selectedCategory = ref("")
-
-const accessToken = async () => {
-  const { value } = await Preferences.get({ key: "accessToken" });
-  transaction(value);
-};
-
-accessToken();
-
-const transaction = async (token) => {
-  const options = {
-    url: "https://api.bridgeapi.io/v2/transactions",
-    params: { limit: '50' },
-    headers: {
-      accept: "application/json",
-      "Client-Id": import.meta.env.VITE_CLIENT_ID,
-      "Client-Secret": import.meta.env.VITE_CLIENT_SECRET,
-      Authorization: `Bearer ${token}`,
-      "Bridge-Version": "2021-06-01",
-      "Accept-Language": "FR",
-    },
-  };
-
-  const response = await CapacitorHttp.get(options);
-
-  if (response.status === 200) {
-    response.data.resources.forEach((e) => {
-      getCategories(e.category_id, e);
-    });
-    setTimeout(function () {
-      transactionsStore.setupTransactions(response.data.resources);
-      totalEmission();
-      filterTransaction(response.data.resources);
-    }, 100);
-  } else {
-    console.log("ERROR Request FAIL");
-  }
-};
 
 const filterTransaction = (depenses) => {
   //week number of today
@@ -89,38 +57,20 @@ const filterTransaction = (depenses) => {
   })
 }
 
-const getCategories = async (idCateg, e) => {
-  const options = {
-    url: "https://api.bridgeapi.io/v2/categories/" + idCateg,
-    headers: {
-      accept: "application/json",
-      "Client-Id": import.meta.env.VITE_CLIENT_ID,
-      "Client-Secret": import.meta.env.VITE_CLIENT_SECRET,
-      "Accept-Language": "fr",
-      "Bridge-Version": "2021-06-01",
-    },
-  };
-
-  const response = await CapacitorHttp.get(options);
-
-  if (response.status === 200) {
-    e.category = response.data.name;
-  } else {
-    console.log("ERROR Request FAIL");
-  }
-};
+filterTransaction(depenses)
 
 const goToSingleTransac = (id) => {
   router.push(`/transaction/${id}`);
 }
 
-function totalEmission(){
+function totalEmission() {
+  console.log("test")
   let total = 0;
   let tabEmission = document.querySelectorAll("#totalempreinteC");
   tabEmission.forEach((e,index) => {
     total += parseFloat(e.innerHTML);
   })
-  totalEmissionValue.value = total.toFixed(1);
+  totalEmissionValue.value = total;
 }
 
 function toDepense(depense){
@@ -172,7 +122,6 @@ function openMenuSelect(){
                   <div class="bigCircle"></div>
                   <div class="circleAround"></div>
                 </div>
-                <p>{{item}}</p>
               </div>
             </li>
           </ul>
@@ -180,7 +129,7 @@ function openMenuSelect(){
       </div>
     </div>
     <div class="transactions_header">
-      <ReturnButton returnBtn=true displayFlex="true" label="Retour à la page d'accueil"/>
+      <ReturnButton returnBtn displayFlex label="Retour à la page d'accueil"/>
       <div class="transactions_header_title">
         <h1>Mes dépenses</h1>
       </div>
@@ -209,7 +158,7 @@ function openMenuSelect(){
             <div class="transactions_list_items_item_right">
               <div class="transactions_list_items_right_secondaryInfo">
                 <p class="amount">{{ item.amount }}€</p>
-                <p class="empreinteC">= <span id="totalempreinteC">3.20</span> kg CO2</p>
+                <p class="empreinteC">= <span id="totalempreinteC">{{ item.impact }}</span> kg CO2</p>
               </div>
             </div>
           </li>
@@ -232,7 +181,7 @@ function openMenuSelect(){
             <div class="transactions_list_items_item_right">
               <div class="transactions_list_items_right_secondaryInfo">
                 <p class="amount">{{ item.amount }}€</p>
-                <p class="empreinteC">= <span id="totalempreinteC">3.20</span> kg CO2</p>
+                <p class="empreinteC">= <span id="totalempreinteC">{{ item.impact }}</span> kg CO2</p>
               </div>
             </div>
           </li>
@@ -256,7 +205,7 @@ function openMenuSelect(){
             <div class="transactions_list_items_item_right">
               <div class="transactions_list_items_right_secondaryInfo">
                 <p class="amount">{{ item.amount }}€</p>
-                <p class="empreinteC">= <span id="totalempreinteC">3.20</span> kg CO2</p>
+                <p class="empreinteC">= <span id="totalempreinteC">{{ item.impact }}</span> kg CO2</p>
               </div>
             </div>
           </li>
@@ -269,7 +218,7 @@ function openMenuSelect(){
 <!--      </div>-->
       <div class="transactions_footer_emission">
         <div class="transactions_footer_emission_total">
-          <p><span class="totalEmission" id="totalEmission">{{totalEmissionValue}}</span> kg de CO2</p>
+          <p><span class="totalEmission" id="totalEmission">{{ totalEmissionValue.toFixed(2) }}</span> kg de CO2</p>
         </div>
         <div class="transactions_footer_emission_add">
           <div>
@@ -279,7 +228,6 @@ function openMenuSelect(){
       </div>
     </div>
   </div>
-  <Menu />
 </template>
 
 <style lang="scss">

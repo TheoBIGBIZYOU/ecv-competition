@@ -15,7 +15,7 @@ const href = () => {
 </script>
 
 <template>
-  <div v-if="displayFlex == 'true'" class="returnButton displayFlex">
+  <div v-if="displayFlex" class="returnButton displayFlex">
     <div v-if="returnBtn" class="returnButton_img" @click="href">
       <svg
         width="17"
