@@ -64,7 +64,6 @@ const goToSingleTransac = (id) => {
 }
 
 function totalEmission() {
-  console.log("test")
   let total = 0;
   let tabEmission = document.querySelectorAll("#totalempreinteC");
   tabEmission.forEach((e,index) => {
@@ -89,7 +88,6 @@ watch(search, (newValue , oldValue)=>{
 })
 
 const selectedCategoryFunction = (e) => {
-  console.log(e);
   state.newWeekTransactions = computed(()=> searchDepense(state.weekTransactions,e));
   state.newLastWeekTransactions = computed(()=> searchDepense(state.lastWeekTransactions,e));
   state.newOtherTransactions = computed(()=> searchDepense(state.otherTransactions,e));
@@ -122,6 +120,7 @@ function openMenuSelect(){
                   <div class="bigCircle"></div>
                   <div class="circleAround"></div>
                 </div>
+                <p>{{ item }}</p>
               </div>
             </li>
           </ul>

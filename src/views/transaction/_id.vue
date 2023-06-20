@@ -81,7 +81,7 @@ const tips = [
 
 <template>
   <div class="transactions_single" id="transactionAnchor">
-    <ReturnButton returnBtn=true displayFlex="true" label="Retour aux dépenses"/>
+    <ReturnButton returnBtn displayFlex label="Retour aux dépenses"/>
     <div class="transactions_single_header">
       <div class="transactions_single_header_title">
         <h1>{{ data.clean_description }}</h1>

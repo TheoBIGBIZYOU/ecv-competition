@@ -67,7 +67,7 @@ const alreadyAccount = () => {
 
 <template>
   <div class="registerForm loginForm">
-    <ReturnButton returnBtn=true label="Inscription"/>
+    <ReturnButton returnBtn label="Inscription"/>
     <div class="form">
       <form ref="register" @submit.prevent="registerForm">
         <div class="form_top">
