@@ -15,8 +15,11 @@ const transactionsStore = useTransactionsStore();
 const state = reactive({
   depenses: computed(() => transactionsStore.transactions),
   weekTransactions: [],
+  newWeekTransactions: computed(() => state.weekTransactions),
   lastWeekTransactions: [],
-  otherTransactions: []
+  newLastWeekTransactions: computed(() => state.lastWeekTransactions),
+  otherTransactions: [],
+  newOtherTransactions: computed(() => state.otherTransactions),
 })
 const search = ref("");
 const totalEmissionValue = ref(0);
@@ -108,13 +111,11 @@ const getCategories = async (idCateg, e) => {
 };
 
 const goToSingleTransac = (id) => {
-  // router.push({ name: "DefineGoal" })
   router.push(`/transaction/${id}`);
 }
 
 function totalEmission(){
   let total = 0;
-  console.log(document.querySelector("body"))
   let tabEmission = document.querySelectorAll("#totalempreinteC");
   tabEmission.forEach((e,index) => {
     total += parseFloat(e.innerHTML);
@@ -131,45 +132,52 @@ function searchDepense(depenses, value){
 }
 
 watch(search, (newValue , oldValue)=>{
-  state.depenses = computed(()=> searchDepense(transactionsStore.transactions,newValue));
+  state.newWeekTransactions = computed(()=> searchDepense(state.weekTransactions,newValue));
+  state.newLastWeekTransactions = computed(()=> searchDepense(state.lastWeekTransactions,newValue));
+  state.newOtherTransactions = computed(()=> searchDepense(state.otherTransactions,newValue));
   totalEmission();
 })
 
-watch(selectedCategory, (newValue , oldValue)=>{
-  state.depenses = computed(()=> searchDepense(transactionsStore.transactions,newValue));
+const selectedCategoryFunction = (e) => {
+  console.log(e);
+  state.newWeekTransactions = computed(()=> searchDepense(state.weekTransactions,e));
+  state.newLastWeekTransactions = computed(()=> searchDepense(state.lastWeekTransactions,e));
+  state.newOtherTransactions = computed(()=> searchDepense(state.otherTransactions,e));
   totalEmission();
   openMenuSelect();
-})
+}
 
 function openMenuSelect(){
   document.querySelector(".menu_select").classList.toggle("-open")
 }
-
-const listTransactions = [
-  {
-    title: "Cette semaine",
-    arrayTransaction: state.weekTransactions,
-  },
-  {
-    title: "La semaine dernière",
-    arrayTransaction: state.lastWeekTransactions,
-  },
-  {
-    title: "Il y a trois semaine et plus",
-    arrayTransaction: state.otherTransactions,
-  },
-];
 
 </script>
 
 <template>
   <div class="transactions">
     <div class="menu_select">
-      <h2>Selectionnez une catégorie</h2>
-      <select v-model="selectedCategory">
-        <option value="">Sélectionnez une catégorie</option>
-        <option v-for="(cat, i) in transactionsStore.categories" :value="cat" :key="i">{{cat}}</option>
-      </select>
+      <div class="menu_select_content">
+        <div class="menu_select_content_close" @click="openMenuSelect()">
+          <p>Fermer la fenêtre</p>
+          <img src="../assets/img/close.svg" alt="">
+        </div>
+        <div class="menu_select_content_title">
+          <h2>Catégories</h2>
+        </div>
+        <div class="menu_select_content_list">
+          <ul>
+            <li v-for="(item,i) in transactionsStore.categories" :key="i" @click="selectedCategoryFunction(item)">
+              <div class="menu_select_content_list_item" v-if="item">
+                <div class="image">
+                  <div class="bigCircle"></div>
+                  <div class="circleAround"></div>
+                </div>
+                <p>{{item}}</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
     <div class="transactions_header">
       <ReturnButton returnBtn=true displayFlex="true" label="Retour à la page d'accueil"/>
@@ -184,10 +192,56 @@ const listTransactions = [
       </div>
     </div>
     <div class="transactions_list">
-      <div class="transactions_list_items" v-for="(list, i) in listTransactions" :key="i">
-        <h2>{{list.title}}</h2>
+      <div class="transactions_list_items" v-if="state.newWeekTransactions.length !== 0">
+        <h2>Cette semaine</h2>
         <ul>
-          <li class="transactions_list_items_item" v-for="item in list.arrayTransaction" :key="item.id" @click="goToSingleTransac(item.id)">
+          <li class="transactions_list_items_item" v-for="item in state.newWeekTransactions" :key="item.id" @click="goToSingleTransac(item.id)">
+            <div class="transactions_list_items_item_left">
+              <div class="transactions_list_items_item_left_image">
+                <div class="bigCircle"></div>
+                <div class="circleAround"></div>
+              </div>
+              <div class="transactions_list_items_left_primaryInfo">
+                <p class="banque">{{ item.clean_description }}</p>
+                <p class="date">{{ item.date }}</p>
+              </div>
+            </div>
+            <div class="transactions_list_items_item_right">
+              <div class="transactions_list_items_right_secondaryInfo">
+                <p class="amount">{{ item.amount }}€</p>
+                <p class="empreinteC">= <span id="totalempreinteC">3.20</span> kg CO2</p>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="transactions_list_items" v-if="state.newLastWeekTransactions.length !== 0">
+        <h2>La semaine dernière</h2>
+        <ul>
+          <li class="transactions_list_items_item" v-for="item in state.newLastWeekTransactions" :key="item.id" @click="goToSingleTransac(item.id)">
+            <div class="transactions_list_items_item_left">
+              <div class="transactions_list_items_item_left_image">
+                <div class="bigCircle"></div>
+                <div class="circleAround"></div>
+              </div>
+              <div class="transactions_list_items_left_primaryInfo">
+                <p class="banque">{{ item.clean_description }}</p>
+                <p class="date">{{ item.date }}</p>
+              </div>
+            </div>
+            <div class="transactions_list_items_item_right">
+              <div class="transactions_list_items_right_secondaryInfo">
+                <p class="amount">{{ item.amount }}€</p>
+                <p class="empreinteC">= <span id="totalempreinteC">3.20</span> kg CO2</p>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="transactions_list_items" v-if="state.newOtherTransactions.length !== 0">
+        <h2>Il y a trois semaine et plus</h2>
+        <ul>
+          <li class="transactions_list_items_item" v-for="item in state.newOtherTransactions" :key="item.id" @click="goToSingleTransac(item.id)">
             <div class="transactions_list_items_item_left">
               <div class="transactions_list_items_item_left_image">
                 <div class="bigCircle"></div>
@@ -231,21 +285,98 @@ const listTransactions = [
 .transactions{
   padding: 0 5%;
   .menu_select{
-    display: none;
-    &.-open{
-      position: fixed;
-      border: 1px solid black;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%,-50%);
-      width: 50%;
-      height: 50%;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(25, 27, 31, .35);
+    bottom: 0;
+    left: 0;
+    z-index: 3;
+    transform: translateY(100%);
+    animation: 1s all ease;
+    .menu_select_content{
+      overflow: scroll;
+      padding: 30px;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 90%;
       background-color: white;
-      display: block;
-      select{
-        height: 20%;
-        background-color: grey;
+      box-shadow: 8px 0px 40px rgba(0, 0, 0, 0.05);
+      border-radius: 10px 10px 0px 0px;
+      &_title{
+        h2{
+          margin-bottom: 2rem;
+        }
       }
+      &_close{
+        display: flex;
+        justify-content: end;
+        gap: 1rem;
+        cursor: pointer;
+      }
+      &_list{
+        ul{
+          list-style-type: none;
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+        }
+        .menu_select_content_list_item{
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          padding: 15px;
+          background-color: #FFFFFF;
+          box-shadow: 0px 8px 40px rgba(0, 0, 0, 0.05);
+          border-radius: 10px;
+          position: relative;
+          p{
+            font-weight: 600;
+            text-transform: uppercase;
+          }
+          .image{
+            width: 35px;
+            height: 35px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            .bigCircle{
+              width: 30px;
+              height: 30px;
+              border-radius: 100vmax;
+              background-color: red;
+            }
+            .circleAround{
+              position: absolute;
+              width: 100%;
+              height: 100%;
+              background-color: transparent;
+              border: 1px solid red;
+              border-radius: 100vmax;
+            }
+          }
+          &::after {
+            content: "";
+            width: 6px;
+            height: 11px;
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: block;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            background: url('data:image/svg+xml,<svg width="6" height="11" viewBox="0 0 6 11" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.66821 5.29272L0.275681 8.68525C-0.0918939 9.05282 -0.0918939 9.64947 0.275681 10.017C0.643257 10.3846 1.2399 10.3846 1.60748 10.017L5.70408 5.92044C6.05123 5.57329 6.05123 5.01127 5.70408 4.665L1.60748 0.568406C1.2399 0.20083 0.643256 0.20083 0.275681 0.568406C-0.0918942 0.935981 -0.0918942 1.53262 0.275681 1.9002L3.66821 5.29272Z" fill="%23C2C3CA"/></svg>');
+          }
+        }
+      }
+    }
+    &.-open{
+      transform: translateY(0);
+      animation: 1s all ease;
     }
   }
   &_header{
