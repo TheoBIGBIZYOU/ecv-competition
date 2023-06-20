@@ -99,6 +99,14 @@ function openMenuSelect(){
   document.querySelector(".menu_select").classList.toggle("-open")
 }
 
+function getFormattedDate(date){
+  const dateObj = new Date(date);
+  const day = dateObj.getDate();
+  const month = new Intl.DateTimeFormat('fr', { month: 'long' }).format(dateObj);
+
+  return `${day} ${month}`;
+}
+
 </script>
 
 <template>
@@ -151,7 +159,7 @@ function openMenuSelect(){
               </div>
               <div class="transactions_list_items_left_primaryInfo">
                 <p class="banque">{{ item.clean_description }}</p>
-                <p class="date">{{ item.date }}</p>
+                <p class="date">{{ getFormattedDate(item.date) }}</p>
               </div>
             </div>
             <div class="transactions_list_items_item_right">
@@ -174,7 +182,7 @@ function openMenuSelect(){
               </div>
               <div class="transactions_list_items_left_primaryInfo">
                 <p class="banque">{{ item.clean_description }}</p>
-                <p class="date">{{ item.date }}</p>
+                <p class="date">{{ getFormattedDate(item.date) }}</p>
               </div>
             </div>
             <div class="transactions_list_items_item_right">
@@ -197,7 +205,7 @@ function openMenuSelect(){
               </div>
               <div class="transactions_list_items_left_primaryInfo">
                 <p class="banque">{{ item.clean_description }}</p>
-                <p class="date">{{ item.date }}</p>
+                <p class="date">{{ getFormattedDate(item.date) }}</p>
                 {{ item.category }}
               </div>
             </div>
