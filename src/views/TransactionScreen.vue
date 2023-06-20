@@ -250,6 +250,7 @@ function openMenuSelect(){
               <div class="transactions_list_items_left_primaryInfo">
                 <p class="banque">{{ item.clean_description }}</p>
                 <p class="date">{{ item.date }}</p>
+                {{ item.category }}
               </div>
             </div>
             <div class="transactions_list_items_item_right">

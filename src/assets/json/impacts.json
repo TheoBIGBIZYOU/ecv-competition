@@ -48,23 +48,15 @@
       "impact": 0.95
     },
     {
-      "label": "Supermarché & épicerie",
+      "label": "Supermarché / Epicerie",
       "impact": 0.924
     },
     {
-      "label": "Vêtements & Chaussures d'occasion",
+      "label": "Vêtements/Chaussures",
       "impact": 0.91
     },
     {
-      "label": "Vêtements & Chaussures neufs",
-      "impact": 0.91
-    },
-    {
-      "label": "Articles de sport d'occasion",
-      "impact": 0.88
-    },
-    {
-      "label": "Articles de sport neufs",
+      "label": "Articles de sport",
       "impact": 0.88
     },
     {
@@ -112,7 +104,7 @@
       "impact": 0.65
     },
     {
-      "label": "Restaurants & Fast Food",
+      "label": "Sortie au restaurant",
       "impact": 0.627
     },
     {
@@ -124,7 +116,7 @@
       "impact": 0.567
     },
     {
-      "label": "Agence de Voyages / Vacances",
+      "label": "Voyages / Vacances",
       "impact": 0.56
     },
     {
@@ -132,11 +124,7 @@
       "impact": 0.5
     },
     {
-      "label": "Décoration & meubles - produits neufs",
-      "impact": 0.5
-    },
-    {
-      "label": "Décoration & meubles - produits d'occasion",
+      "label": "Décoration",
       "impact": 0.5
     },
     {
@@ -276,7 +264,7 @@
       "impact": 0.128
     },
     {
-      "label": "Transport en commun",
+      "label": "Transports en commun",
       "impact": 0.125
     },
     {
@@ -398,5 +386,69 @@
     {
       "label": "Baby sitters",
       "impact": 0.05
+    },
+    {
+      "label": "Café",
+      "impact": 0.0046
+    },
+    {
+      "label": "Dons",
+      "impact": 0.004
+    },
+    {
+      "label": "Services Bancaires",
+      "impact": 0.004
+    },
+    {
+      "label": "Virements",
+      "impact": 0.004
+    },
+    {
+      "label": "Autres rentrées",
+      "impact": 0.004
+    },
+    {
+      "label": "Services en ligne",
+      "impact": 0.010
+    },
+    {
+      "label": "Remboursements",
+      "impact": 0.004
+    },
+    {
+      "label": "Allocations et pensions",
+      "impact": 0.004
+    },
+    {
+      "label": "Impôts fonciers",
+      "impact": 0.004
+    },
+    {
+      "label": "Frais bancaires",
+      "impact": 0.004
+    },
+    {
+      "label": "Téléphonie mobile",
+      "impact": 0.045
+    },
+    {
+      "label": "Assurance",
+      "impact": 0.05
+    },
+    {
+      "label": "Abonnements - Autres",
+      "impact": 0.200
+    },
+    {
+      "label": "Fast foods",
+      "impact": 2.700
+    },
+    {
+      "label": "A catégoriser",
+      "impact": 0
+    },
+    {
+      "label": "Ventes",
+      "impact": 0.500
     }
   ]

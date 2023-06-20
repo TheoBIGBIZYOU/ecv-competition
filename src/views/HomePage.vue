@@ -1,38 +1,117 @@
 <script setup>
+import { CapacitorHttp } from "@capacitor/core";
 import { useRouter } from "vue-router";
 import { useUserStore } from "../store/user";
 import { Preferences } from "@capacitor/preferences";
 import Logout from "../components/Logout.vue";
 import Menu from "../components/Menu.vue";
+import { useTransactionsStore } from "../store/transactions.js";
+import impact from "../assets/json/impacts.json";
 
 import { ref, onMounted } from "vue";
 import Button from "../components/Button.vue";
 
 const userStore = useUserStore();
+const transactionsStore = useTransactionsStore();
 
 const router = useRouter();
 const accessTokenKey = ref("");
 const getBankLink = ref(false);
 const monthGoal = ref(false);
 const goalNumber = ref(0);
-const totalEmission = ref(128.8);
+const totalEmission = ref(0);
+const restEmission = ref(0);
 const purcentGoal = ref(0);
+const transactions = ref([]);
+const filterArray = ref([]);
+const impacts = impact;
 
 const checkHomeAccess = (accessToken) => {
   accessToken == null ? router.push({ name: "Login" }) : "";
+};
+
+const getCategories = async (idCateg, e) => {
+  const options = {
+    url: "https://api.bridgeapi.io/v2/categories/" + idCateg,
+    headers: {
+      accept: "application/json",
+      "Client-Id": import.meta.env.VITE_CLIENT_ID,
+      "Client-Secret": import.meta.env.VITE_CLIENT_SECRET,
+      "Accept-Language": "fr",
+      "Bridge-Version": "2021-06-01",
+    },
+  };
+
+  const response = await CapacitorHttp.get(options);
+
+  if (response.status === 200) {
+    e.category = response.data.name;
+  } else {
+    console.log("ERROR Request FAIL");
+  }
+};
+
+const transaction = async (token) => {
+  const options = {
+    url: "https://api.bridgeapi.io/v2/transactions",
+    params: { limit: "50" },
+    headers: {
+      accept: "application/json",
+      "Client-Id": import.meta.env.VITE_CLIENT_ID,
+      "Client-Secret": import.meta.env.VITE_CLIENT_SECRET,
+      Authorization: `Bearer ${token}`,
+      "Bridge-Version": "2021-06-01",
+      "Accept-Language": "FR",
+    },
+  };
+
+  const response = await CapacitorHttp.get(options);
+
+  if (response.status === 200) {
+    const promises = response.data.resources.map((e) => {
+      return getCategories(e.category_id, e);
+    });
+
+    await Promise.all(promises);
+
+    filterTransaction(response.data.resources, impacts);
+  } else {
+    console.log("ERROR Request FAIL");
+  }
+};
+
+const filterTransaction = (transactions, impactArray) => {
+  const filteredTransactions = transactions.filter((transaction) => {
+    return impactArray.some((impact) => impact.label === transaction.category);
+  });
+
+  filteredTransactions.forEach(transaction => {
+    const category = transaction.category;
+    impacts.forEach(impact => {
+      if (impact.label.includes(category)) {
+        const impactValue = impact.impact;
+        transaction.impact = impactValue;
+      }
+    });
+  });
+
+  totalEmission.value = filteredTransactions.reduce((total, transaction) => total + transaction.impact, 0);
+  getGoal();
+  transactionsStore.setupTransactions(filteredTransactions);
 };
 
 const getGoal = async () => {
   const value = await Preferences.get({ key: "goal" });
   goalNumber.value = value.value;
   purcentGoal.value = (totalEmission.value / goalNumber.value) * 100;
+  restEmission.value = goalNumber.value - totalEmission.value;
 };
 
 const accessToken = async () => {
   const { value } = await Preferences.get({ key: "accessToken" });
   accessTokenKey.value = value;
   checkHomeAccess(value);
-  getGoal();
+  transaction(value);
 };
 
 const getCheckBank = async () => {
@@ -46,7 +125,7 @@ getCheckBank();
 
 accessToken();
 
-function goTo(url){
+function goTo(url) {
   router.push({ name: url });
 }
 
@@ -101,11 +180,11 @@ const tips = [
       <div class="homepage_empreinte_cards" v-if="goalNumber === '0'">
         <div class="homepage_empreinte_cards_total card__wave">
           <p>
-            <span>{{ totalEmission }}</span> kg(s) de CO2
+            <span>{{ totalEmission.toFixed(2) }}</span> kg(s) de CO2
           </p>
         </div>
         <div class="homepage_empreinte_cards_goal">
-          <Button label="Je définis mon objectif du mois" url="DefineGoal"/>
+          <Button label="Je définis mon objectif du mois" url="DefineGoal" />
         </div>
       </div>
       <div class="homepage_empreinte_cards goalDefined" v-else>
@@ -118,7 +197,7 @@ const tips = [
               </div>
               <div class="rest">
                 <span class="label">Il ne te reste plus que</span>
-                <span class="value">{{ goalNumber - totalEmission }} Kg</span>
+                <span class="value">{{ restEmission.toFixed(2) }} Kg</span>
               </div>
             </div>
             <div class="progressBar">
@@ -127,22 +206,24 @@ const tips = [
                 :style="{ width: purcentGoal.toFixed(2) + '%' }"
               ></div>
             </div>
-            <Button label="Je modifie mon objectif du mois" url="DefineGoal" textAlign="left"/>
+            <Button
+              label="Je modifie mon objectif du mois"
+              url="DefineGoal"
+              textAlign="left"
+            />
           </div>
         </div>
         <div class="homepage_empreinte_cards_total card__wave">
           <p>
-            <span>{{ totalEmission }}</span> kg(s) de CO2
+            <span>{{ totalEmission.toFixed(2) }}</span> kg(s) de CO2
           </p>
-          <Button label="Voir les dépenses du mois" url="Transaction"/>
+          <Button label="Voir les dépenses du mois" url="Transaction" />
         </div>
       </div>
     </section>
     <section class="homepage_buttons">
       <div class="homepage_buttons_list">
-        <div
-          class="homepage_buttons_list_item"
-        >
+        <div class="homepage_buttons_list_item">
           <div class="homepage_buttons_list_item_image">
             <img src="../assets/img/questionnaire.svg" alt="" />
           </div>
@@ -150,17 +231,12 @@ const tips = [
             <div class="homepage_buttons_list_item_info_title">
               <p>Répondre au questionnaire</p>
             </div>
-            <div
-              class="homepage_buttons_list_item_info_subtitle"
-            >
+            <div class="homepage_buttons_list_item_info_subtitle">
               <p>8 minutes</p>
             </div>
           </div>
         </div>
-        <div
-            v-if="!getBankLink"
-            class="homepage_buttons_list_item"
-        >
+        <div v-if="!getBankLink" class="homepage_buttons_list_item">
           <div class="homepage_buttons_list_item_image">
             <img src="../assets/img/link_account.svg" alt="" />
           </div>
@@ -194,7 +270,11 @@ const tips = [
               <p>{{ item.subtitle }}</p>
             </div>
             <div class="homepage_tips_content_list_item_button">
-              <Button :label="item.buttonLabel" :url="item.url" noArrow='true'/>
+              <Button
+                :label="item.buttonLabel"
+                :url="item.url"
+                noArrow="true"
+              />
             </div>
           </div>
         </div>
@@ -307,26 +387,26 @@ const tips = [
         }
       }
     }
-    &_right{
+    &_right {
       display: flex;
       align-items: center;
       gap: 1rem;
-      &_objectif{
-        background: linear-gradient(180deg, #FF8D07 0%, #FFE24D 100%);
+      &_objectif {
+        background: linear-gradient(180deg, #ff8d07 0%, #ffe24d 100%);
         width: 25px;
         height: 25px;
         border-radius: 100vmax;
         display: flex;
         align-items: center;
         justify-content: center;
-        p{
+        p {
           color: white;
         }
-        .circle{
+        .circle {
           width: 32px;
           height: 32px;
           background-color: transparent;
-          border: 1px solid #FFE14B;
+          border: 1px solid #ffe14b;
           border-radius: 100vmax;
           position: absolute;
         }
