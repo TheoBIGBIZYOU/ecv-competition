@@ -82,6 +82,7 @@ const trophees = [
           <div class="historique_main_header_content_indiv" @click="ongletActive = false">
             <p :class="!ongletActive ? '-active' : null">Mes trophées</p>
           </div>
+          <div class="historique_main_header_content_bar" :class="ongletActive === true ? 'Ongletleft' : 'Ongletright'"></div>
         </div>
       </div>
       <div class="historique_main_listTransac" v-if="ongletActive">
@@ -157,6 +158,7 @@ const trophees = [
       &_content{
         display: flex;
         border-bottom: 1px solid #CBCBDD;
+        position: relative;
         &_indiv{
           flex: 0 0 50%;
           text-align: center;
@@ -167,9 +169,22 @@ const trophees = [
             padding: 20px 0;
             &.-active{
               color: #3B63DB;
-              border-bottom: 4px solid #3B63DB;
               padding: 20px 0;
             }
+          }
+        }
+        &_bar{
+          position: absolute;
+          bottom: -2px;
+          width: 50%;
+          background-color: #3B63DB;
+          height: 4px;
+          transition: .3s all ease;
+          &.Ongletleft{
+            transform: translateX(0%);
+          }
+          &.Ongletright{
+            transform: translateX(100%);
           }
         }
       }
@@ -285,9 +300,9 @@ const trophees = [
               background-color: #CBCBDD;
               border-radius: 32px;
               &_progress{
-                background-color: #FFB72A;
+                background-color: #3B63DB;
                 border-radius: 32px;
-                padding: 4px 10px;
+                padding: 4px 0px;
                 text-align: right;
                 color: #fff;
                 max-width: 100%;
