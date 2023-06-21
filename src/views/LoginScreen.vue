@@ -10,7 +10,7 @@ import ReturnButton from "../components/ReturnButton.vue";
 const mail = ref("admin@admin.fr");
 const password = ref("adminadmin");
 
-const home = "http://localhost:5173/";
+const home = "http://localhost:5173/home";
 
 const userStore = useUserStore();
 
@@ -160,19 +160,20 @@ const noAccount = () => {
 
 <style lang="scss">
 .loginForm {
+  max-height: 100vh;
   width: 90%;
   margin: 0 auto;
-  height: 95vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  overflow: hidden;
   &_title {
     h1 {
       font-weight: 700;
     }
   }
   form {
-    margin-top: 5rem;
+    margin-top: 80px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -180,14 +181,15 @@ const noAccount = () => {
     .form_top {
       display: flex;
       flex-direction: column;
-      gap: 2rem;
+      gap: 32px;
     }
     .form_field {
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 8px;
       label {
-        font-weight: 700;
+        font-weight: 600;
+        font-size: 12px;
       }
       .passwordInput {
         position: relative;
@@ -212,7 +214,6 @@ const noAccount = () => {
       button[type="submit"] {
         display: block;
         margin-inline: auto;
-        margin-top: 10px;
         width: 100%;
         padding: 18px 0;
         border-radius: 8px;
@@ -223,7 +224,7 @@ const noAccount = () => {
     }
   }
   .noAccount {
-    margin-top: 32px;
+    margin: 32px 0 66px;
     text-align: center;
     font-weight: 700;
     text-decoration: underline;
