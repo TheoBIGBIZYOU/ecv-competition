@@ -11,6 +11,7 @@ import QuestionnaireScreen from '../views/QuestionnaireScreen.vue';
 import ProfilScreen from '../views/Profil.vue';
 import RewardsScreen from '../views/RewardsScreen.vue';
 import ChallengesScreen from '../views/Challenges.vue';
+import HistoryScreen from '../views/HistoryScreen.vue';
 
 
 const routes = [
@@ -62,6 +63,11 @@ const routes = [
         path: '/challenges',
         name: 'Challenges',
         component: ChallengesScreen
+    },
+    {
+        path: '/history',
+        name: 'History',
+        component: HistoryScreen
     }
 ]
 

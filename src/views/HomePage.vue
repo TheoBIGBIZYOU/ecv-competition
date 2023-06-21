@@ -8,7 +8,7 @@ import Logout from "../components/Logout.vue";
 import { useTransactionsStore } from "../store/transactions.js";
 import impact from "../assets/json/impacts.json";
 
-import { ref, onMounted } from "vue";
+import {ref, onMounted, reactive, computed} from "vue";
 import Button from "../components/Button.vue";
 
 const userStore = useUserStore();
@@ -24,7 +24,13 @@ const restEmission = ref(0);
 const purcentGoal = ref(0);
 const transactions = ref([]);
 const filterArray = ref([]);
+const userPoints = ref([]);
 const impacts = impact;
+
+const state = reactive({
+  userPoints: computed(() => transactionsStore.userPoints),
+})
+
 
 const checkHomeAccess = (accessToken) => {
   accessToken == null ? router.push({ name: "Login" }) : "";
@@ -170,7 +176,7 @@ const tips = [
           <img src="../assets/img/notif.svg" alt="" />
         </div>
         <div class="homepage_header_right_objectif">
-          <p>15</p>
+          <p>{{state.userPoints}}</p>
           <div class="circle"></div>
         </div>
       </div>
