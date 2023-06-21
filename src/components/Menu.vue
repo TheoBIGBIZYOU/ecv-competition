@@ -101,7 +101,7 @@ const goTo = (href) => {
           <span>Défis</span>
         </li>
         <li
-          :class="linkActive === 'Rewards' ? 'active' : ''"
+          :class="linkActive === 'Rewards' || linkActive === 'History' ? 'active' : ''"
           @click="goTo('Rewards')"
         >
           <svg

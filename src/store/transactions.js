@@ -12,9 +12,7 @@ export const useTransactionsStore = defineStore('transactions', {
         setupTransactions(transactions) {
             this.transactions = Array.from(transactions)
             this.updateCatArray(this.categories, this.transactions);
-            this.updatePartArray(this.partenairesTransactions, this.transactions);
-            console.log(state.partenairesTransactions);
-            console.log('salut');
+            this.updatePartArray(this.transactions);
         },
         updateCatArray(categories,transactions){
             transactions.forEach((e)=>{
@@ -27,30 +25,29 @@ export const useTransactionsStore = defineStore('transactions', {
                 }
             })
         },
-        updatePartArray(partenaires, transactions){
-            partenaires = [];
+        updatePartArray(transactions){
+            this.partenairesTransactions = [];
             //create partenaire array
             transactions.forEach((e)=>{
                 if(e.clean_description.includes('Paypal')){
-                    partenaires.push({
-                        'transaction': e.category,
+                    this.partenairesTransactions.push({
+                        'transaction': e,
                         'points': 10
                     })
                 }
-                if(e.clean_description.includes('Biocoop')){
-                    partenaires.push({
-                        'transaction': e.category,
+                else if(e.clean_description.includes('Biocoop')){
+                    this.partenairesTransactions.push({
+                        'transaction': e,
                         'points': 50
                     })
                 }
-                if(e.clean_description.includes('Leclerc')){
-                    partenaires.push({
-                        'transaction': e.category,
+                else if(e.clean_description.includes('Leclerc')){
+                    this.partenairesTransactions.push({
+                        'transaction': e,
                         'points': 20
                     })
                 }
-                console.log("tt");
-                this.countPoint(partenaires);
+                this.countPoint(this.partenairesTransactions);
             })
         },
         countPoint(array) {

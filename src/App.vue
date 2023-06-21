@@ -12,7 +12,7 @@ const linkActive = ref('');
 watch(
   () => router.currentRoute.value.name,
   (newName) => {
-    showMenu.value = !["Login", "Register", "Transaction"].includes(newName);
+    showMenu.value = !["Login", "Register", "Transaction", "Single Transaction"].includes(newName);
     linkActive.value = router.currentRoute.value.name;
     console.log(linkActive.value)
   }
