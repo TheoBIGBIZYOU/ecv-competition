@@ -24,6 +24,7 @@ const restEmission = ref(0);
 const purcentGoal = ref(0);
 const transactions = ref([]);
 const filterArray = ref([]);
+const firstName = ref('');
 const impacts = impact;
 
 const checkHomeAccess = (accessToken) => {
@@ -122,7 +123,14 @@ const getCheckBank = async () => {
   }
 };
 
-const getFirstName = async () => {}
+const getUserName = async () => {
+  const { value } = await Preferences.get({ key: "userName" });
+  firstName.value = value;
+  
+  firstName.value === null ? firstName.value = "John Doe" : ''
+};
+
+getUserName();
 
 getCheckBank();
 
@@ -164,7 +172,7 @@ const tips = [
         </div>
         <div class="homepage_header_info_name">
           <p class="title">Bienvenue,</p>
-          <p class="subtitle">Fleur</p>
+          <p class="subtitle">{{ firstName }}</p>
         </div>
       </div>
       <div class="homepage_header_right">

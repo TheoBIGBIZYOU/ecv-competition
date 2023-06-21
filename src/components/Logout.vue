@@ -31,7 +31,7 @@ const logout = async () => {
     Preferences.remove({ key: "linkBank" });
     Preferences.remove({ key: "storyAlreadySee" });
     Preferences.remove({key: "accessToken" });
-    Preferences.remove({key: "firstName" });
+    Preferences.remove({key: "userName" });
     Preferences.set({
       key: "goal",
       value: 0

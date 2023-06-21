@@ -5,22 +5,42 @@ import { ref } from "vue";
 
 
 const accessTokenKey = ref('');
-const name = ref('');
+const firstName = ref('');
 
 const accessToken = async () => {
   const { value } = await Preferences.get({ key: "accessToken" });
   accessTokenKey.value = value;
 };
 
-const userName = async () => {
+const getUserName = async () => {
   const { value } = await Preferences.get({ key: "userName" });
-  console.log(value)
+  firstName.value = value;
+  
+  firstName.value === null ? firstName.value = "John Doe" : ''
 };
 
+getUserName();
+
 accessToken();
-userName();
 </script>
 
 <template>
-    <Logout :accesstoken="accessTokenKey"/>
+  <div class="userInfos">
+    <h1>Profil</h1>
+    <div class="userInfos__photo">
+      <img src="../assets/img/coco_little.png" alt="" />
+    </div>
+    <div class="userInfos__content">
+      <p class="firstname">{{ firstName }}</p>
+      <span>Editer le profil</span>
+    </div>
+  </div>
+  <Logout :accesstoken="accessTokenKey"/>
 </template>
+
+<style lang="scss" scoped>
+  .userInfos {
+    background-color: #fff;
+    padding: 24px;
+  }
+</style>
