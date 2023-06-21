@@ -8,6 +8,7 @@ import TransactionScreen from '../views/TransactionScreen.vue';
 import TransactionDetails from '../views/transaction/_id.vue';
 import DefineGoal from '../views/DefineGoal.vue';
 import QuestionnaireScreen from '../views/QuestionnaireScreen.vue';
+import RewardsScreen from '../views/RewardsScreen.vue';
 
 const routes = [
     {
@@ -43,6 +44,11 @@ const routes = [
         path: '/questionnaire',
         name: 'Questionnaire',
         component: QuestionnaireScreen
+    },
+    {
+        path: '/rewards',
+        name: 'rewards',
+        component: RewardsScreen
     }
 ]
 
