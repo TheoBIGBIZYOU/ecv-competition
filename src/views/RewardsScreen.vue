@@ -7,7 +7,7 @@ import { ref } from "vue";
 import Menu from "../components/Menu.vue";
 
 const router = useRouter();
-const userPoint = ref(200);
+const userPoint = ref(0);
 const userLevel = ref();
 const restOfPoints = ref();
 
