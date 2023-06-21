@@ -4,7 +4,7 @@ import { useRouter } from "vue-router";
 import { useUserStore } from "../store/user";
 import { Preferences } from "@capacitor/preferences";
 import Logout from "../components/Logout.vue";
-import Menu from "../components/Menu.vue";
+// import Menu from "../components/Menu.vue";
 import { useTransactionsStore } from "../store/transactions.js";
 import impact from "../assets/json/impacts.json";
 
@@ -283,7 +283,7 @@ const tips = [
       </div>
     </section>
   </div>
-  <Menu />
+  <!-- <Menu /> -->
   <!--  <div class="header flex flex-center" v-if="!getBankLink">-->
   <!--    <div class="co2__counter flex flex-center">-->
   <!--      <span class="co2__counter-number" style>{{ goalNumber }}</span>-->

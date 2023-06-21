@@ -8,7 +8,9 @@ import TransactionScreen from '../views/TransactionScreen.vue';
 import TransactionDetails from '../views/transaction/_id.vue';
 import DefineGoal from '../views/DefineGoal.vue';
 import QuestionnaireScreen from '../views/QuestionnaireScreen.vue';
-import Profil from '../views/Profil.vue';
+import ProfilScreen from '../views/Profil.vue';
+import RewardsScreen from '../views/Rewards.vue';
+import ChallengesScreen from '../views/Challenges.vue';
 
 const routes = [
     {
@@ -48,7 +50,17 @@ const routes = [
     {
         path: '/profil',
         name: 'Profil',
-        component: Profil
+        component: ProfilScreen
+    },
+    {
+        path: '/rewards',
+        name: 'Rewards',
+        component: RewardsScreen
+    },
+    {
+        path: '/challenges',
+        name: 'Challenges',
+        component: ChallengesScreen
     }
 ]
 
