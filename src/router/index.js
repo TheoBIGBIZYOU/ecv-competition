@@ -9,8 +9,9 @@ import TransactionDetails from '../views/transaction/_id.vue';
 import DefineGoal from '../views/DefineGoal.vue';
 import QuestionnaireScreen from '../views/QuestionnaireScreen.vue';
 import ProfilScreen from '../views/Profil.vue';
-import RewardsScreen from '../views/Rewards.vue';
+import RewardsScreen from '../views/RewardsScreen.vue';
 import ChallengesScreen from '../views/Challenges.vue';
+
 
 const routes = [
     {

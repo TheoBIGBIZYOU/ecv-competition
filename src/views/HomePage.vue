@@ -225,7 +225,7 @@ const tips = [
     </section>
     <section class="homepage_buttons">
       <div class="homepage_buttons_list">
-        <div class="homepage_buttons_list_item">
+        <div class="homepage_buttons_list_item" @click="goTo('Questionnaire')">
           <div class="homepage_buttons_list_item_image">
             <img src="../assets/img/questionnaire.svg" alt="" />
           </div>
