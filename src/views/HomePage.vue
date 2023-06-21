@@ -60,7 +60,7 @@ const getCategories = async (idCateg, e) => {
 const transaction = async (token) => {
   const options = {
     url: "https://api.bridgeapi.io/v2/transactions",
-    params: { limit: "50" },
+    params: { limit: "1000" },
     headers: {
       accept: "application/json",
       "Client-Id": import.meta.env.VITE_CLIENT_ID,
@@ -291,39 +291,6 @@ const tips = [
       </div>
     </section>
   </div>
-  <!-- <Menu /> -->
-  <!--  <div class="header flex flex-center" v-if="!getBankLink">-->
-  <!--    <div class="co2__counter flex flex-center">-->
-  <!--      <span class="co2__counter-number" style>{{ goalNumber }}</span>-->
-  <!--      <span class="co2__counter-txt">grammes(s)<br />de CO2</span>-->
-  <!--    </div>-->
-  <!--    <h2>liez votre compte à une banque</h2>-->
-  <!--  </div>-->
-  <!--  <div class="header" v-else>-->
-  <!--    <div v-if="goalNumber === '0'" class="flex flex-center">-->
-  <!--      <div class="co2__counter">-->
-  <!--        <span class="co2__counter-number" style>0</span>-->
-  <!--        <span class="co2__counter-txt">grammes(s)<br />de CO2</span>-->
-  <!--      </div>-->
-  <!--      <div class="define__goal" @click="defineGoal">-->
-  <!--        Je définis mon objectif du mois-->
-  <!--      </div>-->
-  <!--    </div>-->
-  <!--    <div v-else>-->
-  <!--      <h2>Mon objectif du mois : {{ goalNumber }}g CO2</h2>-->
-  <!--      <div class="progressBar">-->
-  <!--        <div class="progressBar__progress" :style="{width: purcentGoal.toFixed(2) + '%'}">{{ totalEmission }}kg CO2</div>-->
-  <!--      </div>-->
-  <!--      <div class="define__goal" @click="defineGoal">Modifier mon objectif</div>-->
-  <!--    </div>-->
-  <!--    <h2>Les émissions de CO2 de vos dépenses du mois</h2>-->
-  <!--    <p>{{ totalEmission }}kg CO2</p>-->
-  <!--  </div>-->
-  <!--  <Logout-->
-  <!--    @update-access-token="checkHomeAccess"-->
-  <!--    :accesstoken="accessTokenKey"-->
-  <!--  />-->
-  <!--  <p @click="goToTransaction()">transaction</p>-->
 </template>
 
 

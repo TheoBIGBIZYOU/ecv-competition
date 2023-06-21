@@ -38,8 +38,8 @@ const goTo = (href) => {
           <span>Accueil</span>
         </li>
         <li 
-          :class="linkActive === 'Transaction' ? 'active' : ''"
-          @click="goTo('Transaction')"
+          :class="linkActive === 'Activity' ? 'active' : ''"
+          @click="goTo('Activity')"
         >
           <svg
             width="25"

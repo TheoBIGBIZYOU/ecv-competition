@@ -12,6 +12,7 @@ const state = reactive({
   transactions: computed(() => transactionsStore.partenairesTransactions),
 })
 
+
 function getFormattedDate(date){
   const dateObj = new Date(date);
   const day = dateObj.getDate();
