@@ -1,5 +1,6 @@
 <script setup>
 import { CapacitorHttp } from "@capacitor/core";
+import { Preferences } from "@capacitor/preferences";
 import { useRouter } from "vue-router";
 import { useUserStore } from "../store/user";
 import ReturnButton from "../components/ReturnButton.vue";
@@ -9,8 +10,11 @@ import { ref } from "vue";
 const userStore = useUserStore();
 
 const showPassword = ref(false);
+const firstName = ref("");
 const mail = ref("");
 const password = ref("");
+
+const home = "http://localhost:5173/home";
 
 const router = useRouter();
 
@@ -29,8 +33,65 @@ const registerForm = async () => {
 
   const response = await CapacitorHttp.post(options);
 
-  if (response.status === 200) {
+  if (response.status === 200 || response.status === 201) {
+    Preferences.set({
+      key: "userName",
+      value: firstName.value
+    });
     authUser(response.data.email, password.value);
+  } else {
+    console.log("ERROR Request FAIL");
+  }
+};
+
+const bridgeConnect = async () => {
+  const options = {
+    url: "https://api.bridgeapi.io/v2/connect/items/add",
+    headers: {
+      accept: "application/json",
+      "Client-Id": import.meta.env.VITE_CLIENT_ID,
+      "Client-Secret": import.meta.env.VITE_CLIENT_SECRET,
+      Authorization: `Bearer ${userStore.accessToken}`,
+      "Bridge-Version": "2021-06-01",
+      "content-type": "application/json",
+    },
+    data: { prefill_email: mail.value, redirect_url: home },
+  };
+
+  const response = await CapacitorHttp.post(options);
+
+  if (response.status === 200) {
+    window.location.href = response.data.redirect_url;
+  } else {
+    console.log("ERROR Request FAIL");
+  }
+};
+
+const bridgeConnectCheck = async () => {
+  const options = {
+    url: "https://api.bridgeapi.io/v2/items",
+    params: { limit: "50" },
+    headers: {
+      accept: "application/json",
+      "Client-Id": import.meta.env.VITE_CLIENT_ID,
+      "Client-Secret": import.meta.env.VITE_CLIENT_SECRET,
+      Authorization: `Bearer ${userStore.accessToken}`,
+      "Bridge-Version": "2021-06-01",
+    },
+  };
+
+  const response = await CapacitorHttp.get(options);
+
+  if (response.status === 200) {
+    if (response.data.resources.length === 0) {
+      bridgeConnect();
+    } else {
+      await Preferences.set({
+        key: "linkBank",
+        value: true,
+      });
+      router.push({ name: "Home" });
+    }
   } else {
     console.log("ERROR Request FAIL");
   }
@@ -51,9 +112,13 @@ const authUser = async (mail, password) => {
 
   const response = await CapacitorHttp.post(options);
 
+  console.log(response)
+
   if (response.status === 200) {
+    
     userStore.setupAccessToken(response.data.access_token);
-    router.push({ name: "Home" });
+    bridgeConnectCheck();
+    // router.push({ name: "Home" });
   } else {
     console.log("ERROR Request FAIL");
   }
@@ -71,6 +136,10 @@ const alreadyAccount = () => {
     <div class="form">
       <form ref="register" @submit.prevent="registerForm">
         <div class="form_top">
+          <div class="form_field">
+            <label for="name">Prénom</label>
+            <input name="name" type="text" v-model="firstName" />
+          </div>
           <div class="form_field">
             <label for="email">Email</label>
             <input name="email" type="email" v-model="mail" />

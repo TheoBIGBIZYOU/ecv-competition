@@ -353,7 +353,6 @@ const tips = [
 }
 
 .homepage {
-  padding: 0 0 100px;
   background-color: #f5f5f5;
   & > section {
     padding-left: 24px;

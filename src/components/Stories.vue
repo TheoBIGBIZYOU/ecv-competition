@@ -63,7 +63,7 @@ onMounted(async () => {
       </div>
       <div class="preheader">
         <span>{{ data.pretitle }}</span>
-        <button @click="closeStories">
+        <button class="closeStory" @click="closeStories">
           <svg
             width="18"
             height="18"

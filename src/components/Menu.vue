@@ -165,9 +165,9 @@ const goTo = (href) => {
   left: 0;
   width: 100%;
   background-color: white;
-  padding: 25px 0;
+  padding: 16px 0;
   nav {
-    width: 80%;
+    max-width: 340px;
     margin: 0 auto;
     ul {
       display: flex;
@@ -178,6 +178,7 @@ const goTo = (href) => {
 
       li {
         flex-grow: 1;
+        flex-basis: 0;
         height: 48px;
         display: flex;
         flex-direction: column;

@@ -36,6 +36,7 @@ const routes = [
     },
     {
         path: '/transaction/:id',
+        name: 'SingleTransaction',
         component: TransactionDetails
     },
     {

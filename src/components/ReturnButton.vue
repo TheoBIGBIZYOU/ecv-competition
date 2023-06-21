@@ -45,7 +45,7 @@ const href = () => {
 
 <style lang="scss" scoped>
 .returnButton {
-  margin-top: 77px;
+  padding-top: 77px;
   &.displayFlex{
     display: flex;
     gap: 1rem;

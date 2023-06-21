@@ -12,15 +12,14 @@ const linkActive = ref('');
 watch(
   () => router.currentRoute.value.name,
   (newName) => {
-    showMenu.value = !["Login", "Register", "Transaction"].includes(newName);
+    showMenu.value = !["Login", "Register", "Transaction", "SingleTransaction"].includes(newName);
     linkActive.value = router.currentRoute.value.name;
-    console.log(linkActive.value)
   }
 );
 </script>
 
 <template>
-  <div class="main">
+  <div :class="showMenu ? 'main menuVisible' : 'main'">
     <!--    <Stories />-->
     <router-view></router-view>
     <Menu v-if="showMenu" :linkActive="linkActive" />
@@ -47,6 +46,13 @@ body {
   font-family: "Work Sans", sans-serif;
 }
 
+.main {
+  background-color: #F8F8F8;
+  &.menuVisible {
+    padding-bottom: 100px;
+  }
+}
+
 .flex {
   display: flex;
 }
@@ -56,7 +62,7 @@ body {
   justify-content: center;
 }
 
-button:not(.showPassword) {
+button:not(.showPassword):not(.closeStory) {
   display: block;
   margin-inline: auto;
   //width: 100%;
