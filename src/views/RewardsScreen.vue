@@ -3,13 +3,22 @@
 
 
 import {useRouter} from "vue-router";
-import { ref } from "vue";
+import {computed, reactive, ref} from "vue";
 import Menu from "../components/Menu.vue";
+import { useTransactionsStore } from "../store/transactions.js";
 
 const router = useRouter();
-const userPoint = ref(75);
 const userLevel = ref();
 const restOfPoints = ref();
+const pourcentLevel = ref();
+const pointsNextLevel = ref();
+
+
+const transactionsStore = useTransactionsStore();
+
+const state = reactive({
+  userPoints: computed(() => transactionsStore.userPoints),
+})
 
 const continueBtn = () => {
   router.push({ name: "Home" });
@@ -115,6 +124,7 @@ const levels = [
 
 function getLevel(points){
   const levels = {
+    0: 0,
     1: 50,
     2: 100,
     3: 150,
@@ -125,19 +135,26 @@ function getLevel(points){
   let level = 0;
   let nextLevelPoints = 0;
   let progress = 0;
-
+  let restPoints = 0;
   for (let i = 1; i <= Object.keys(levels).length; i++) {
     if (points <= levels[i]) {
-      level = i - 1;
+      level = i;
       nextLevelPoints = levels[i];
+      restPoints = nextLevelPoints - points;
       progress = (points - levels[i - 1]) / (nextLevelPoints - levels[i - 1]) * 100;
       break;
     }
   }
   userLevel.value = level;
-  restOfPoints.value = progress + '%';
+  restOfPoints.value = restPoints;
+  pourcentLevel.value = progress + '%';
+  pointsNextLevel.value = nextLevelPoints;
 }
-getLevel(userPoint.value)
+getLevel(state.userPoints)
+
+function goTo(url) {
+  router.push({ name: url });
+}
 
 </script>
 
@@ -152,12 +169,12 @@ getLevel(userPoint.value)
           <div class="recompenses_header_main_content_top">
             <div class="recompenses_header_main_content_top_left">
               <div class="recompenses_header_main_content_top_left_objectif">
-                <p>15</p>
+                <p>{{ state.userPoints }}</p>
                 <div class="circle"></div>
               </div>
               <div class="recompenses_header_main_content_top_left_text">
-                <p class="point">{{ userPoint }} points</p>
-                <p>= {{ (userPoint * 0.003333).toFixed(2) }} €</p>
+                <p class="point">{{ state.userPoints }} points</p>
+                <p>= {{ (state.userPoints * 0.003333).toFixed(2) }} €</p>
               </div>
             </div>
             <div class="recompenses_header_main_content_top_right">
@@ -170,7 +187,7 @@ getLevel(userPoint.value)
               </div>
             </div>
           </div>
-          <div class="recompenses_header_main_content_bottom">
+          <div class="recompenses_header_main_content_bottom" @click="goTo('History')">
             <p>Voir mon historique</p>
           </div>
         </div>
@@ -178,10 +195,11 @@ getLevel(userPoint.value)
     </div>
     <div class="recompenses_main">
       <div class="recompenses_main_level">
-        <p>Niveau {{userLevel}}/5</p>
+        <p>Niveau {{userLevel}}</p>
         <div class="recompenses_main_level_jauge">
-          <div class="recompenses_main_level_jauge_progress" :style="`width:` + restOfPoints"></div>
+          <div class="recompenses_main_level_jauge_progress" :style="`width:` + pourcentLevel"></div>
         </div>
+        <p class="nextLevel">Plus que {{restOfPoints}} points pour atteindre le prochain niveau</p>
       </div>
       <div class="recompenses_main_list">
         <div class="recompenses_main_list_item " v-for="(item,index) in levels"  :class="userLevel < index + 1 ? 'disable' : null ">
@@ -325,6 +343,9 @@ getLevel(userPoint.value)
         font-size: 12px;
         color: #52526B;
         margin-bottom: 10px;
+        &.nextLevel{
+          margin-top: 10px;
+        }
       }
       &_jauge{
         width: 100%;
