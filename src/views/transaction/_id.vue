@@ -17,6 +17,7 @@ const changePersonnesValue = ref(1);
 const changeMarqueValue = ref('');
 const city = ref('Lille');
 const marque = ref('');
+import impact from "../../assets/json/impacts.json";
 
 const accessToken = async () => {
   const { value } = await Preferences.get({ key: "accessToken" });
@@ -63,6 +64,8 @@ const getCategories = async (idCateg, e) => {
 
   if (response.status === 200) {
     e.category = response.data.name;
+    const filteredData = impact.filter(item => item.label === e.category);
+    e.color = filteredData[0].color
   } else {
     console.log("ERROR Request FAIL");
   }
@@ -123,8 +126,8 @@ const tips = [
       </div>
       <div class="transactions_single_header_category">
         <div class="image">
-          <div class="bigCircle"></div>
-          <div class="circleAround"></div>
+          <div class="bigCircle" :style="{ backgroundColor: data.color }"></div>
+          <div class="circleAround" :style="{border: '1px solid ' + data.color}"></div>
         </div>
         <p>{{ data.category }}</p>
       </div>
@@ -591,14 +594,14 @@ const tips = [
           width: 30px;
           height: 30px;
           border-radius: 100vmax;
-          background-color: red;
+          //background-color: red;
         }
         .circleAround{
           position: absolute;
           width: 100%;
           height: 100%;
           background-color: transparent;
-          border: 1px solid red;
+          //border: 1px solid red;
           border-radius: 100vmax;
         }
       }

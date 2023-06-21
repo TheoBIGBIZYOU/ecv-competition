@@ -125,10 +125,10 @@ function getFormattedDate(date){
             <li v-for="(item,i) in transactionsStore.categories" :key="i" @click="selectedCategoryFunction(item)">
               <div class="menu_select_content_list_item" v-if="item">
                 <div class="image">
-                  <div class="bigCircle"></div>
-                  <div class="circleAround"></div>
+                  <div class="bigCircle" :style="{ backgroundColor: item.color }"></div>
+                  <div class="circleAround" :style="{border: '1px solid ' + item.color}"></div>
                 </div>
-                <p>{{ item }}</p>
+                <p>{{ item.label }}</p>
               </div>
             </li>
           </ul>
@@ -154,8 +154,8 @@ function getFormattedDate(date){
           <li class="transactions_list_items_item" v-for="item in state.newWeekTransactions" :key="item.id" @click="goToSingleTransac(item.id)">
             <div class="transactions_list_items_item_left">
               <div class="transactions_list_items_item_left_image">
-                <div class="bigCircle"></div>
-                <div class="circleAround"></div>
+                <div class="bigCircle" :style="{ backgroundColor: item.category_color }"></div>
+                <div class="circleAround" :style="{border: '1px solid ' + item.category_color}"></div>
               </div>
               <div class="transactions_list_items_left_primaryInfo">
                 <p class="banque">{{ item.clean_description }}</p>
@@ -177,8 +177,8 @@ function getFormattedDate(date){
           <li class="transactions_list_items_item" v-for="item in state.newLastWeekTransactions" :key="item.id" @click="goToSingleTransac(item.id)">
             <div class="transactions_list_items_item_left">
               <div class="transactions_list_items_item_left_image">
-                <div class="bigCircle"></div>
-                <div class="circleAround"></div>
+                <div class="bigCircle" :style="{ backgroundColor: item.category_color }"></div>
+                <div class="circleAround" :style="{border: '1px solid ' + item.category_color}"></div>
               </div>
               <div class="transactions_list_items_left_primaryInfo">
                 <p class="banque">{{ item.clean_description }}</p>
@@ -200,8 +200,8 @@ function getFormattedDate(date){
           <li class="transactions_list_items_item" v-for="item in state.newOtherTransactions" :key="item.id" @click="goToSingleTransac(item.id)">
             <div class="transactions_list_items_item_left">
               <div class="transactions_list_items_item_left_image">
-                <div class="bigCircle"></div>
-                <div class="circleAround"></div>
+                <div class="bigCircle" :style="{ backgroundColor: item.category_color }"></div>
+                <div class="circleAround" :style="{border: '1px solid ' + item.category_color}"></div>
               </div>
               <div class="transactions_list_items_left_primaryInfo">
                 <p class="banque">{{ item.clean_description }}</p>
@@ -302,14 +302,14 @@ function getFormattedDate(date){
               width: 30px;
               height: 30px;
               border-radius: 100vmax;
-              background-color: red;
+              //background-color: red;
             }
             .circleAround{
               position: absolute;
               width: 100%;
               height: 100%;
               background-color: transparent;
-              border: 1px solid red;
+              //border: 1px solid red;
               border-radius: 100vmax;
             }
           }
@@ -439,14 +439,14 @@ function getFormattedDate(date){
               width: 30px;
               height: 30px;
               border-radius: 100vmax;
-              background-color: red;
+              //background-color: red;
             }
             .circleAround{
               position: absolute;
               width: 100%;
               height: 100%;
               background-color: transparent;
-              border: 1px solid red;
+              //border: 1px solid red;
               border-radius: 100vmax;
             }
           }

@@ -12,7 +12,12 @@ export const useTransactionsStore = defineStore('transactions', {
         },
         updateCatArray(categories,transactions){
             transactions.forEach((e)=>{
-                if(!categories.includes(e.category)) this.categories.push(e.category)
+                if(!categories.includes(e.category)) {
+                    this.categories.push({
+                        'label': e.category,
+                        'color': e.category_color
+                    })
+                }
             })
         }
     },

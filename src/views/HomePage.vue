@@ -91,6 +91,7 @@ const filterTransaction = (transactions, impactArray) => {
       if (impact.label.includes(category)) {
         const impactValue = impact.impact;
         transaction.impact = impactValue;
+        transaction.category_color = impact.color
       }
     });
   });
