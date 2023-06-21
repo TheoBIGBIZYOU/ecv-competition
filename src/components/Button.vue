@@ -11,7 +11,6 @@ defineProps({
 });
 
 const goTo = (href) => {
-  console.log(href);
   router.push({name : href})
 }
 </script>

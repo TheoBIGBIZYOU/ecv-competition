@@ -33,7 +33,7 @@ const loginForm = async () => {
 
   const response = await CapacitorHttp.post(options);
 
-  if (response.status === 200) {
+  if (response.status === 200 || response.status === 201 || response.status === 202) {
     userStore.setupAccessToken(response.data.access_token);
     Preferences.set({
       key: "accessToken",
@@ -61,7 +61,7 @@ const bridgeConnect = async () => {
 
   const response = await CapacitorHttp.post(options);
 
-  if (response.status === 200) {
+  if (response.status === 200 || response.status === 201 || response.status === 202) {
     window.location.href = response.data.redirect_url;
   } else {
     console.log("ERROR Request FAIL");
@@ -83,7 +83,7 @@ const bridgeConnectCheck = async () => {
 
   const response = await CapacitorHttp.get(options);
 
-  if (response.status === 200) {
+  if (response.status === 200 || response.status === 201 || response.status === 202) {
     if (response.data.resources.length === 0) {
       bridgeConnect();
     } else {

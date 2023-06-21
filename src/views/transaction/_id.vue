@@ -40,7 +40,7 @@ const singleData = async (token) => {
 
   const response = await CapacitorHttp.get(options);
 
-  if (response.status === 200) {
+  if (response.status === 200 || response.status === 201 || response.status === 202) {
     data.value = response.data;
     getCategories(data.value.category_id, data.value);
   } else {
@@ -62,7 +62,7 @@ const getCategories = async (idCateg, e) => {
 
   const response = await CapacitorHttp.get(options);
 
-  if (response.status === 200) {
+  if (response.status === 200 || response.status === 201 || response.status === 202) {
     e.category = response.data.name;
     const filteredData = impact.filter(item => item.label === e.category);
     e.color = filteredData[0].color

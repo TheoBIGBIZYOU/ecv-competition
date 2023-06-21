@@ -26,7 +26,7 @@ const logout = async () => {
 
   const response = await CapacitorHttp.post(options);
 
-  if (response.status === 200) {
+  if (response.status === 200 || response.status === 201 || response.status === 202) {
     Preferences.remove({ key: "accessToken" });
     Preferences.remove({ key: "linkBank" });
     Preferences.remove({ key: "storyAlreadySee" });

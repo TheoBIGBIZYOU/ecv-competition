@@ -44,7 +44,7 @@ const getCategories = async (idCateg, e) => {
 
   const response = await CapacitorHttp.get(options);
 
-  if (response.status === 200) {
+  if (response.status === 200 || response.status === 201 || response.status === 202) {
     e.category = response.data.name;
   } else {
     console.log("ERROR Request FAIL");
@@ -67,7 +67,7 @@ const transaction = async (token) => {
 
   const response = await CapacitorHttp.get(options);
 
-  if (response.status === 200) {
+  if (response.status === 200 || response.status === 201 || response.status === 202) {
     const promises = response.data.resources.map((e) => {
       return getCategories(e.category_id, e);
     });
@@ -121,6 +121,8 @@ const getCheckBank = async () => {
     getBankLink.value = true;
   }
 };
+
+const getFirstName = async () => {}
 
 getCheckBank();
 
