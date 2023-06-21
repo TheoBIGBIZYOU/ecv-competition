@@ -167,7 +167,7 @@ const tips = [
     <section class="homepage_empreinte">
     <header class="homepage_header">
       <div class="homepage_header_info">
-        <div class="homepage_header_info_image">
+        <div class="homepage_header_info_image user_image">
           <img src="../assets/img/coco_little.png" alt="" />
         </div>
         <div class="homepage_header_info_name">
@@ -378,19 +378,6 @@ const tips = [
       display: flex;
       align-items: center;
       gap: 1rem;
-      &_image {
-        width: 45px;
-        height: 45px;
-        background-color: var(--grey);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 23px;
-
-        img {
-          width: 100%;
-        }
-      }
       &_name {
         .title {
           font-size: 12px;

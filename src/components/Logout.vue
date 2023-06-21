@@ -45,8 +45,15 @@ const logout = async () => {
 </script>
 
 <template>
-  <button @click="logout">Se déconnecter</button>
+  <button @click="logout" class="logoutBtn">Se déconnecter</button>
 </template>
 
-<style>
+<style lang="scss" scoped>
+  .logoutBtn {
+    text-decoration: underline;
+    background: unset;
+    border: 0px;
+    font-size: 14px;
+    font-weight: 600;
+  }
 </style>
