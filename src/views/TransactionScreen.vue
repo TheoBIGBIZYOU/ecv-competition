@@ -474,7 +474,7 @@ function getFormattedDate(date){
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 3% 0;
+      padding: 16px 0;
       &_total{
         .totalEmission{
           font-weight: 700;

@@ -21,7 +21,7 @@ const goTo = (href) => {
         <li @click="goTo('Home')">
           <img src="../assets/img/menu/card.svg" alt="">
         </li>
-        <li @click="goTo('Transaction')">
+        <li @click="goTo('Profil')">
           <img src="../assets/img/menu/profil.svg" alt="">
         </li>
       </ul>

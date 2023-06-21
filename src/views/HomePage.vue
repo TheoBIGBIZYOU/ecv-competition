@@ -154,7 +154,8 @@ const tips = [
 
 <template>
   <div class="homepage">
-    <section class="homepage_header">
+    <section class="homepage_empreinte">
+    <header class="homepage_header">
       <div class="homepage_header_info">
         <div class="homepage_header_info_image">
           <img src="../assets/img/coco_little.png" alt="" />
@@ -173,18 +174,18 @@ const tips = [
           <div class="circle"></div>
         </div>
       </div>
-    </section>
-    <section class="homepage_empreinte">
+    </header>
       <div class="homepage_empreinte_title">
         <h1>Mon empreinte carbone</h1>
       </div>
       <div class="homepage_empreinte_cards" v-if="goalNumber === '0'">
-        <div class="homepage_empreinte_cards_total card__wave">
-          <p>
+        <div class="homepage_empreinte_cards_total card__wave" :style="getBankLink ? 'margin-bottom: 16px' : ''">
+          <p :style="getBankLink ? 'text-align: center' : ''">
             <span>{{ totalEmission.toFixed(2) }}</span> kg(s) de CO2
           </p>
+          <Button v-if="getBankLink" label="Voir les dépenses du mois" url="Transaction" />
         </div>
-        <div class="homepage_empreinte_cards_goal">
+        <div v-if="getBankLink" class="homepage_empreinte_cards_goal">
           <Button label="Je définis mon objectif du mois" url="DefineGoal" />
         </div>
       </div>
@@ -218,7 +219,7 @@ const tips = [
           <p>
             <span>{{ totalEmission.toFixed(2) }}</span> kg(s) de CO2
           </p>
-          <Button label="Voir les dépenses du mois" url="Transaction" />
+          <Button v-if="getBankLink" label="Voir les dépenses du mois" url="Transaction" />
         </div>
       </div>
     </section>
@@ -352,13 +353,18 @@ const tips = [
 }
 
 .homepage {
-  padding: 0 5% 100px;
+  padding: 0 0 100px;
   background-color: #f5f5f5;
+  & > section {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
   &_header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 3% 0;
+    padding: 16px 0;
+    margin-bottom: 16px;
     &_info {
       display: flex;
       align-items: center;
@@ -415,7 +421,8 @@ const tips = [
     }
   }
   &_empreinte {
-    padding: 15px 0;
+    background-color: #fff;
+    padding-bottom: 24px;
     &_title {
       h1 {
         font-size: 16px;
@@ -432,7 +439,7 @@ const tips = [
 
         display: flex;
         flex-direction: column;
-        gap: 1rem;
+        gap: 16px;
         p {
           font-size: 16px;
           color: white;
@@ -445,7 +452,7 @@ const tips = [
       &_goal {
         .progress {
           background-color: #fff;
-          padding: 16px 24px;
+          padding: 16px 24px 0;
           box-shadow: 0px 8px 40px 0px #0000000d;
           border-radius: 8px;
           margin-bottom: 16px;
@@ -468,6 +475,17 @@ const tips = [
                 line-height: 12px;
                 color: var(--black);
               }
+            }
+          }
+
+          button {
+            box-shadow: unset;
+            border-radius: 0px;
+            border-top: 1px solid #EFF5FF;
+            padding: 16px 0;
+
+            &::after {
+              right: 0;
             }
           }
         }

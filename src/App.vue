@@ -46,7 +46,7 @@ button:not(.showPassword) {
   margin-inline: auto;
   //width: 100%;
   width: -webkit-fill-available;
-  font-weight: 700;
+  font-weight: 600;
   text-align: center;
   font-size: 14px;
   padding: 18px 24px;

@@ -43,7 +43,7 @@ const continueBtn = () => {
   &_header{
     margin: 5rem 0;
     background-color: #EFF5FF;
-    padding: 3%;
+    padding: 16px;
     h1{
       font-weight: 700;
       margin-bottom: 1rem;

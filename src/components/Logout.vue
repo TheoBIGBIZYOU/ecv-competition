@@ -1,5 +1,6 @@
 <script setup>
 import { CapacitorHttp } from "@capacitor/core";
+import { useRouter } from "vue-router";
 import { Preferences } from "@capacitor/preferences";
 import { getCurrentInstance } from "vue";
 
@@ -7,16 +8,11 @@ const props = defineProps({
   accesstoken: String,
 });
 
+const router = useRouter();
+
 const { emit } = getCurrentInstance();
 
 const logout = async () => {
-  Preferences.remove({ key: "accessToken" });
-  Preferences.remove({ key: "linkBank" });
-  Preferences.set({
-    key: "goal",
-    value: 0
-  });
-
   const options = {
     url: "https://api.bridgeapi.io/v2/logout",
     headers: {
@@ -31,7 +27,16 @@ const logout = async () => {
   const response = await CapacitorHttp.post(options);
 
   if (response.status === 200) {
+    Preferences.remove({ key: "accessToken" });
+    Preferences.remove({ key: "linkBank" });
+    Preferences.remove({ key: "storyAlreadySee" });
+    Preferences.remove({key: "accessToken" });
+    Preferences.set({
+      key: "goal",
+      value: 0
+    });
     emit("update-access-token", null);
+    router.push({name : "Login"})
   } else {
     console.log("ERROR Request FAIL");
   }
@@ -39,7 +44,7 @@ const logout = async () => {
 </script>
 
 <template>
-  <button @click="logout">Logout</button>
+  <button @click="logout">Se déconnecter</button>
 </template>
 
 <style>
