@@ -33,10 +33,14 @@ const registerForm = async () => {
 
   const response = await CapacitorHttp.post(options);
 
-  if (response.status === 200 || response.status === 201 || response.status === 202) {
+  if (
+    response.status === 200 ||
+    response.status === 201 ||
+    response.status === 202
+  ) {
     Preferences.set({
       key: "userName",
-      value: firstName.value
+      value: firstName.value,
     });
     authUser(response.data.email, password.value);
   } else {
@@ -60,7 +64,11 @@ const bridgeConnect = async () => {
 
   const response = await CapacitorHttp.post(options);
 
-  if (response.status === 200 || response.status === 201 || response.status === 202) {
+  if (
+    response.status === 200 ||
+    response.status === 201 ||
+    response.status === 202
+  ) {
     window.location.href = response.data.redirect_url;
   } else {
     console.log("ERROR Request FAIL");
@@ -82,7 +90,11 @@ const bridgeConnectCheck = async () => {
 
   const response = await CapacitorHttp.get(options);
 
-  if (response.status === 200 || response.status === 201 || response.status === 202) {
+  if (
+    response.status === 200 ||
+    response.status === 201 ||
+    response.status === 202
+  ) {
     if (response.data.resources.length === 0) {
       bridgeConnect();
     } else {
@@ -112,11 +124,23 @@ const authUser = async (mail, password) => {
 
   const response = await CapacitorHttp.post(options);
 
-  if (response.status === 200 || response.status === 201 || response.status === 202) {
+  if (
+    response.status === 200 ||
+    response.status === 201 ||
+    response.status === 202
+  ) {
     userStore.setupAccessToken(response.data.access_token);
     Preferences.set({
       key: "accessToken",
       value: response.data.access_token,
+    });
+    Preferences.set({
+      key: "uuid",
+      value: response.data.user.uuid,
+    });
+    Preferences.set({
+      key: "password",
+      value: password.value,
     });
     bridgeConnectCheck();
     // router.push({ name: "Home" });
@@ -127,13 +151,12 @@ const authUser = async (mail, password) => {
 
 const alreadyAccount = () => {
   router.push({ name: "Login" });
-}
-
+};
 </script>
 
 <template>
   <div class="registerForm loginForm">
-    <ReturnButton returnBtn label="S'inscrire"/>
+    <ReturnButton returnBtn label="S'inscrire" />
     <div class="form">
       <form ref="register" @submit.prevent="registerForm">
         <div class="form_top">
@@ -153,7 +176,10 @@ const alreadyAccount = () => {
                 :type="showPassword ? 'text' : 'password'"
                 v-model="password"
               />
-              <button class="showPassword" @click.prevent="showPassword = !showPassword">
+              <button
+                class="showPassword"
+                @click.prevent="showPassword = !showPassword"
+              >
                 <svg
                   width="16"
                   height="14"
@@ -182,7 +208,9 @@ const alreadyAccount = () => {
           <button type="submit">Suivant</button>
         </div>
       </form>
-      <div class="noAccount" @click="alreadyAccount()">J’ai déjà un compte, je me connecte</div>
+      <div class="noAccount" @click="alreadyAccount()">
+        J’ai déjà un compte, je me connecte
+      </div>
     </div>
   </div>
 </template>
