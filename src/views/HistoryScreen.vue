@@ -3,6 +3,7 @@ import {useRouter} from "vue-router";
 import ReturnButton from "../components/ReturnButton.vue";
 import {computed, reactive, ref} from "vue";
 import { useTransactionsStore } from "../store/transactions.js";
+import impact from "../assets/json/impacts.json"
 
 const router = useRouter();
 const transactionsStore = useTransactionsStore();

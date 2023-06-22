@@ -144,6 +144,10 @@ function getLevel(points){
       progress = (points - levels[i - 1]) / (nextLevelPoints - levels[i - 1]) * 100;
       break;
     }
+    else{
+      level = 5;
+      progress = 100;
+    }
   }
   userLevel.value = level;
   restOfPoints.value = restPoints;

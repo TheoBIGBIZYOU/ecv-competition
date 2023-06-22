@@ -1,9 +1,10 @@
 <script setup>
 
-import {computed, onMounted, reactive, ref} from "vue";
+import {computed, onMounted, reactive, ref, watch} from "vue";
 import { Chart, registerables } from 'chart.js';
 import { useTransactionsStore } from "../store/transactions.js";
 import Button from "../components/Button.vue";
+import impact from "../assets/json/impacts.json"
 
 Chart.register(...registerables);
 
@@ -27,6 +28,7 @@ const state = reactive({
   arrayTransacCurrentYear: [],
   arrayTransacLastYear: [],
   arrayTransacOtherYears: [],
+  moyenneCateg: [],
 })
 
 const transactionByWeek = (transactions) => {
@@ -100,6 +102,7 @@ function countEmpreinte(tab){
   let points = 0;
   tab.forEach((e) => {
     points += e.impact
+    console.log(points)
   })
   return points.toFixed(2)
 }
@@ -125,6 +128,7 @@ const tips = [
 ];
 
 function moyenneJour(item, returnValue){
+  pourcentCateg(item);
   let moyenneTab = [];
   let categAmount = [];
   let day1 = [];
@@ -135,7 +139,7 @@ function moyenneJour(item, returnValue){
   let day6 = [];
   let day7 = [];
   let days = [];
-  var jours = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
+  let jours = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
   item.forEach((e) => {
     let date = new Date(e.date);
     let day = date.getDay();
@@ -175,14 +179,42 @@ function moyenneJour(item, returnValue){
   }
 }
 
-onMounted(() => {
-  // chartJour(state.arrayEmpreinteOfWeek);
-  // chartCateg();
-});
-
+function pourcentCateg(item){
+  let Alimentation = [];
+  let Mobilite = [];
+  let Services = [];
+  let Logement = [];
+  item.forEach((e) => {
+    impact.forEach((i) => {
+      if(e.category === i.label){
+        switch (i.color) {
+          case '#2FBC5D' :
+            Alimentation.push(e);
+          case '#002595' :
+            Mobilite.push(e);
+          case '#FFB72A' :
+            Services.push(e);
+          case '#FF3767' :
+            Logement.push(e);
+        }
+      }
+    })
+  })
+  let categ = [Alimentation, Mobilite, Services, Logement];
+  let moyenneCateg = [];
+  categ.forEach((e)=>{
+    let moyenne = 0;
+    e.forEach((i,index) => {
+      moyenne+=i.impact
+    })
+    moyenne = (moyenne / 12).toFixed(2);
+    moyenneCateg.push(moyenne);
+  })
+  state.moyenneCateg = moyenneCateg;
+}
 
 function chartJour(value){
-  const canvas = document.getElementById('graphique');
+  const canvas = document.querySelector('#graphique_' + ongletActive.value + '_' + semaineActive.value);
   const ctx = canvas.getContext('2d');
   const joursSemaine = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
   new Chart(ctx, {
@@ -210,23 +242,28 @@ function chartJour(value){
             display: false
           }
         }
-      }
+      },
+      // plugins: {
+      //   tooltip: {
+      //     enabled: false
+      //   }
+      // }
     },
   });
 }
 
-function chartCateg(){
-  const canvas = document.getElementById('graphiqueCateg');
+function chartCateg(value){
+  const canvas = document.querySelector('#graphiqueCateg_' + ongletActive.value + '_' + semaineActive.value);
   const ctx = canvas.getContext('2d');
-  const joursSemaine = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+  const joursSemaine = ['Alimentation', 'Mobilité', 'Services', 'Logement'];
   new Chart(ctx, {
     type: 'doughnut',
     data: {
       labels: joursSemaine,
       datasets: [{
         label: 'Données',
-        data: state.arrayEmpreinteOfWeek,
-        backgroundColor: ['#5D85FD', '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40']
+        data: value,
+        backgroundColor: ['#2FBC5D', '#002595', '#FFB72A', '#FF3767']
       }]
     },
     options: {
@@ -250,6 +287,28 @@ function chartCateg(){
     }
   });
 }
+
+watch(
+    () => state.arrayEmpreinteOfWeek,
+    (newValue) => {
+      chartJour(state.arrayEmpreinteOfWeek);
+      chartCateg(state.moyenneCateg);
+    }
+);
+watch(
+    () => state.arrayTransacMonth,
+    (newValue) => {
+      chartJour(state.arrayTransacMonth);
+      chartCateg(state.moyenneCateg);
+    }
+);
+watch(
+    () => state.arrayTransacYear,
+    (newValue) => {
+      chartJour(state.arrayTransacYear);
+      chartCateg(state.moyenneCateg);
+    }
+);
 
 </script>
 
@@ -307,9 +366,9 @@ function chartCateg(){
                 </div>
               </div>
             </div>
-            <!--            <div class="activity_main_semaine_indiv_chartJour">-->
-            <!--              <canvas id="graphique"></canvas>-->
-            <!--            </div>-->
+            <div class="activity_main_semaine_indiv_chartJour">
+              <canvas :id="`graphique_` + ongletActive + '_' + index"></canvas>
+            </div>
             <div class="activity_main_semaine_indiv_tips">
               <div class="activity_main_semaine_indiv_tips_content">
                 <div class="activity_main_semaine_indiv_tips_content_list">
@@ -339,12 +398,12 @@ function chartCateg(){
                 </div>
               </div>
             </div>
-            <!--            <div class="activity_main_semaine_indiv_chartCateg">-->
-            <!--              <div class="activity_main_semaine_indiv_chartCateg_title">-->
-            <!--                <p>Répartition de l’empreinte CO2 en fonction des catégories de dépenses :</p>-->
-            <!--              </div>-->
-            <!--              <canvas id="graphiqueCateg"></canvas>-->
-            <!--            </div>-->
+            <div class="activity_main_semaine_indiv_chartCateg">
+              <div class="activity_main_semaine_indiv_chartCateg_title">
+                <p>Répartition de l’empreinte CO2 en fonction des catégories de dépenses :</p>
+              </div>
+              <canvas :id="`graphiqueCateg_` + ongletActive + '_' + index"></canvas>
+            </div>
             <div class="activity_main_semaine_indiv_defis">
               <div class="activity_main_semaine_indiv_defis_content">
                 <p class="title">Les défis</p>
@@ -391,9 +450,9 @@ function chartCateg(){
                 </div>
               </div>
             </div>
-            <!--            <div class="activity_main_semaine_indiv_chartJour">-->
-            <!--              <canvas id="graphique"></canvas>-->
-            <!--            </div>-->
+            <div class="activity_main_semaine_indiv_chartJour">
+              <canvas :id="`graphique_` + ongletActive + '_' + index"></canvas>
+            </div>
             <div class="activity_main_semaine_indiv_tips">
               <div class="activity_main_semaine_indiv_tips_content">
                 <div class="activity_main_semaine_indiv_tips_content_list">
@@ -423,12 +482,12 @@ function chartCateg(){
                 </div>
               </div>
             </div>
-            <!--            <div class="activity_main_semaine_indiv_chartCateg">-->
-            <!--              <div class="activity_main_semaine_indiv_chartCateg_title">-->
-            <!--                <p>Répartition de l’empreinte CO2 en fonction des catégories de dépenses :</p>-->
-            <!--              </div>-->
-            <!--              <canvas id="graphiqueCateg"></canvas>-->
-            <!--            </div>-->
+            <div class="activity_main_semaine_indiv_chartCateg">
+              <div class="activity_main_semaine_indiv_chartCateg_title">
+                <p>Répartition de l’empreinte CO2 en fonction des catégories de dépenses :</p>
+              </div>
+              <canvas :id="`graphiqueCateg_` + ongletActive + '_' + index"></canvas>
+            </div>
             <div class="activity_main_semaine_indiv_defis">
               <div class="activity_main_semaine_indiv_defis_content">
                 <p class="title">Les défis</p>
@@ -475,9 +534,9 @@ function chartCateg(){
                 </div>
               </div>
             </div>
-            <!--            <div class="activity_main_semaine_indiv_chartJour">-->
-            <!--              <canvas id="graphique"></canvas>-->
-            <!--            </div>-->
+            <div class="activity_main_semaine_indiv_chartJour">
+              <canvas :id="`graphique_` + ongletActive + '_' + index"></canvas>
+            </div>
             <div class="activity_main_semaine_indiv_tips">
               <div class="activity_main_semaine_indiv_tips_content">
                 <div class="activity_main_semaine_indiv_tips_content_list">
@@ -507,12 +566,12 @@ function chartCateg(){
                 </div>
               </div>
             </div>
-            <!--            <div class="activity_main_semaine_indiv_chartCateg">-->
-            <!--              <div class="activity_main_semaine_indiv_chartCateg_title">-->
-            <!--                <p>Répartition de l’empreinte CO2 en fonction des catégories de dépenses :</p>-->
-            <!--              </div>-->
-            <!--              <canvas id="graphiqueCateg"></canvas>-->
-            <!--            </div>-->
+            <div class="activity_main_semaine_indiv_chartCateg">
+              <div class="activity_main_semaine_indiv_chartCateg_title">
+                <p>Répartition de l’empreinte CO2 en fonction des catégories de dépenses :</p>
+              </div>
+              <canvas :id="`graphiqueCateg_` + ongletActive + '_' + index"></canvas>
+            </div>
             <div class="activity_main_semaine_indiv_defis">
               <div class="activity_main_semaine_indiv_defis_content">
                 <p class="title">Les défis</p>
@@ -534,6 +593,7 @@ function chartCateg(){
   &_header{
     h1{
       font-size: 20px;
+      padding: 25px 0;
       font-weight: 600;
     }
   }
@@ -682,6 +742,7 @@ function chartCateg(){
             p{
               font-size: 16px;
               font-weight: 600;
+              margin-bottom: 15px;
             }
           }
         }
