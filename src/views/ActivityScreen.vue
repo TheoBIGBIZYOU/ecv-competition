@@ -5,8 +5,11 @@ import { Chart, registerables } from 'chart.js';
 import { useTransactionsStore } from "../store/transactions.js";
 import Button from "../components/Button.vue";
 import impact from "../assets/json/impacts.json"
+import 'chartjs-plugin-datalabels';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 Chart.register(...registerables);
+Chart.register(ChartDataLabels);
 
 const transactionsStore = useTransactionsStore();
 
@@ -101,10 +104,8 @@ transactionByYear(state.transactions)
 
 function countEmpreinte(tab){
   let points = 0;
-  console.log(state.daysValue);
   state.daysValue.forEach((e) => {
     e.forEach((i) => {
-      console.log(i.impact)
       points += i.impact
     })
   })
@@ -187,6 +188,7 @@ function pourcentCateg(item){
   let Mobilite = [];
   let Services = [];
   let Logement = [];
+  let Autres = [];
   item.forEach((e) => {
     impact.forEach((i) => {
       if(e.category === i.label){
@@ -199,21 +201,35 @@ function pourcentCateg(item){
             Services.push(e);
           case '#FF3767' :
             Logement.push(e);
+          case '#BBB6B6' :
+            Autres.push(e);
         }
       }
     })
   })
-  let categ = [Alimentation, Mobilite, Services, Logement];
+  let categ = [Alimentation, Mobilite, Services, Logement, Autres];
+  console.log(categ);
   let moyenneCateg = [];
   categ.forEach((e)=>{
     let moyenne = 0;
     e.forEach((i,index) => {
       moyenne+=i.impact
     })
-    moyenne = (moyenne / 12).toFixed(2);
+    // moyenne = (moyenne / 12).toFixed(2);
     moyenneCateg.push(moyenne);
   })
-  state.moyenneCateg = moyenneCateg;
+  console.log(moyenneCateg)
+  let moyenneTotal = 0
+  moyenneCateg.forEach((e) => {
+    moyenneTotal += e;
+  })
+  let pourcentCateg = [];
+
+  moyenneCateg.forEach((e) =>{
+    pourcentCateg.push((e * 100) / moyenneTotal)
+  })
+  console.log(pourcentCateg);
+  state.moyenneCateg = pourcentCateg;
 }
 
 function chartJour(value){
@@ -231,6 +247,20 @@ function chartJour(value){
       }]
     },
     options: {
+      tooltip: false,
+      plugins: {
+        datalabels: {
+          anchor: 'end',
+          align: 'bottom',
+          color: 'white',
+          formatter: Math.round,
+          font: {
+            weight: 'bold',
+            size: '16'
+          },
+          textDirection: 'ltr',
+        }
+      },
       scales: {
         x: {
           grid: {
@@ -246,11 +276,6 @@ function chartJour(value){
           }
         }
       },
-      // plugins: {
-      //   tooltip: {
-      //     enabled: false
-      //   }
-      // }
     },
   });
 }
@@ -258,7 +283,7 @@ function chartJour(value){
 function chartCateg(value){
   const canvas = document.querySelector('#graphiqueCateg_' + ongletActive.value + '_' + semaineActive.value);
   const ctx = canvas.getContext('2d');
-  const joursSemaine = ['Alimentation', 'Mobilité', 'Services', 'Logement'];
+  const joursSemaine = ['Alimentation', 'Mobilité', 'Services', 'Logement', 'Autres'];
   new Chart(ctx, {
     type: 'doughnut',
     data: {
@@ -266,7 +291,7 @@ function chartCateg(value){
       datasets: [{
         label: 'Données',
         data: value,
-        backgroundColor: ['#2FBC5D', '#002595', '#FFB72A', '#FF3767']
+        backgroundColor: ['#2FBC5D', '#002595', '#FFB72A', '#FF3767', '#BBB6B6']
       }]
     },
     options: {
@@ -274,17 +299,27 @@ function chartCateg(value){
         legend: {
           position: 'bottom'
         },
-        tooltip: {
-          callbacks: {
-            label: function(context) {
-              var label = context.label || '';
-              if (label) {
-                label += ': ';
-              }
-              label += context.formattedValue + ' kg de CO2'; // Ajouter le texte 'kg de CO2' à la valeur du segment
-              return label;
-            }
-          }
+        datalabels: {
+          anchor: 'end',
+          align: 'top',
+          color: '#5D85FD',
+          formatter: function(value, context) {
+            return value.toFixed(2) + '%'; // Ajouter '%' après chaque valeur
+          },
+          backgroundColor: function(context) {
+            return context.dataset.backgroundColor;
+          },
+          borderColor: 'white',
+          borderRadius: 5,
+          borderWidth: 0,
+          color: 'white',
+          font: {
+            weight: 'bold',
+            size: '16'
+          },
+          textDirection: 'ltr',
+          textAlign: 'center',
+          clip: true
         }
       }
     }

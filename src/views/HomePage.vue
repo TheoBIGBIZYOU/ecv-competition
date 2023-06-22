@@ -73,7 +73,6 @@ const transaction = async (token) => {
   };
 
   const response = await CapacitorHttp.get(options);
-  console.log(response.status)
   if (response.status === 200 || response.status === 201 || response.status === 202) {
     const promises = response.data.resources.map((e) => {
       return getCategories(e.category_id, e);

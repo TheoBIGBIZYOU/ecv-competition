@@ -23,7 +23,6 @@ export const useTransactionsStore = defineStore('transactions', {
                         'color': e.category_color
                     })
                 }
-                console.log(!categories.includes(e.category));
             })
         },
         updatePartArray(transactions){
