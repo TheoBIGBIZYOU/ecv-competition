@@ -234,7 +234,6 @@ function pourcentCateg(item){
     e.forEach((i,index) => {
       moyenne+=i.impact
     })
-    // moyenne = (moyenne / 12).toFixed(2);
     moyenneCateg.push(moyenne);
   })
   let moyenneTotal = 0
@@ -317,7 +316,7 @@ function chartCateg(value){
         },
         datalabels: {
           anchor: 'end',
-          align: 'top',
+          align: 'center',
           color: '#5D85FD',
           formatter: function(value, context) {
             return value.toFixed(2) + '%'; // Ajouter '%' après chaque valeur
