@@ -66,15 +66,15 @@ transactionByWeek(state.transactions);
 const transactionByMonth = (transactions) => {
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth();
-  transactions.forEach((transaction) => {
-    const transactionDate = new Date(transaction.date);
+  transactions.forEach((e) => {
+    const transactionDate = new Date(e.date);
     const transactionMonth = transactionDate.getMonth();
     if (currentMonth === transactionMonth) {
-      state.arrayTransacCurrentMonth.push(transaction);
-    } else if (currentMonth - transactionMonth === 1 || (currentMonth === 0 && transactionMonth === 11)) {
-      state.arrayTransacLastMonth.push(transaction);
+      state.arrayTransacCurrentMonth.push(e);
+    } else if (currentMonth - transactionMonth === 1) {
+      state.arrayTransacLastMonth.push(e);
     } else if (currentMonth - transactionMonth === 2){
-      state.arrayTransacOtherMonths.push(transaction);
+      state.arrayTransacOtherMonths.push(e);
     }
     state.arrayTransacMonth = [state.arrayTransacCurrentMonth, state.arrayTransacLastMonth, state.arrayTransacOtherMonths];
   });
@@ -85,15 +85,15 @@ transactionByMonth(state.transactions);
 const transactionByYear = (transactions) => {
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
-  transactions.forEach((transaction) => {
-    const transactionDate = new Date(transaction.date);
+  transactions.forEach((e) => {
+    const transactionDate = new Date(e.date);
     const transactionYear = transactionDate.getFullYear();
     if (currentYear === transactionYear) {
-      state.arrayTransacCurrentYear.push(transaction);
+      state.arrayTransacCurrentYear.push(e);
     } else if (currentYear - transactionYear === 1) {
-      state.arrayTransacLastYear.push(transaction);
+      state.arrayTransacLastYear.push(e);
     } else if(currentYear - transactionYear === 2) {
-      state.arrayTransacOtherYears.push(transaction);
+      state.arrayTransacOtherYears.push(e);
     }
     state.arrayTransacYear = [state.arrayTransacCurrentYear, state.arrayTransacLastYear, state.arrayTransacOtherYears];
   });
@@ -101,6 +101,14 @@ const transactionByYear = (transactions) => {
 
 transactionByYear(state.transactions)
 
+
+function countEmpreinteHeader(tab){
+  let points = 0;
+  tab.forEach((e) => {
+    points += e.impact
+  })
+  return points.toFixed(2)
+}
 
 function countEmpreinte(tab){
   let points = 0;
@@ -146,23 +154,32 @@ function moyenneJour(item, returnValue){
   let days = [];
   let jours = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
   item.forEach((e) => {
+    let dateNow = new Date();
     let date = new Date(e.date);
     let day = date.getDay();
-    switch (day) {
-      case 1:
+    let month = date.getMonth();
+    if(dateNow.getMonth() === month) {
+      if(day === 1){
         day1.push(e);
-      case 2:
+      }
+      else if( day === 2){
         day2.push(e);
-      case 3:
+      }
+      else if( day === 3){
         day3.push(e);
-      case 4:
+      }
+      else if( day === 4){
         day4.push(e);
-      case 5:
+      }
+      else if( day === 5){
         day5.push(e);
-      case 6:
+      }
+      else if( day === 6){
         day6.push(e);
-      case 7:
+      }
+      else if( day === 7){
         day7.push(e);
+      }
     }
   })
   days = [day1, day2, day3, day4, day5, day6, day7];
@@ -192,17 +209,20 @@ function pourcentCateg(item){
   item.forEach((e) => {
     impact.forEach((i) => {
       if(e.category === i.label){
-        switch (i.color) {
-          case '#2FBC5D' :
-            Alimentation.push(e);
-          case '#002595' :
-            Mobilite.push(e);
-          case '#FFB72A' :
-            Services.push(e);
-          case '#FF3767' :
-            Logement.push(e);
-          case '#BBB6B6' :
-            Autres.push(e);
+        if(i.color === '#2FBC5D'){
+          Alimentation.push(e);
+        }
+        else if(i.color === '#002595'){
+          Mobilite.push(e);
+        }
+        else if(i.color === '#FFB72A'){
+          Services.push(e);
+        }
+        else if(i.color === '#FF3767'){
+          Logement.push(e);
+        }
+        else if(i.color === 'BBB6B6'){
+          Autres.push(e);
         }
       }
     })
@@ -250,7 +270,6 @@ function chartJour(value){
           anchor: 'end',
           align: 'bottom',
           color: 'white',
-          formatter: Math.round,
           font: {
             weight: 'bold',
             size: '16'
@@ -384,7 +403,7 @@ watch(
               </div>
             </div>
             <div class="activity_main_semaine_indiv_value">
-              <p class="empreinte"><span>{{countEmpreinte(item)}}</span> kg(s) de CO2</p>
+              <p class="empreinte"><span>{{countEmpreinteHeader(item)}}</span> kg(s) de CO2</p>
               <p class="subtitle">Sous la moyenne FR de 692 kgs CO2/semaine</p>
               <Button noArrow='true' label="Voir toutes mes dépenses" url="Transaction" />
             </div>
@@ -468,7 +487,7 @@ watch(
               </div>
             </div>
             <div class="activity_main_semaine_indiv_value">
-              <p class="empreinte"><span>{{countEmpreinte(item)}}</span> kg(s) de CO2</p>
+              <p class="empreinte"><span>{{countEmpreinteHeader(item)}}</span> kg(s) de CO2</p>
               <p class="subtitle">Sous la moyenne FR de 692 kgs CO2/semaine</p>
               <Button noArrow='true' label="Voir toutes mes dépenses" url="Transaction" />
             </div>
@@ -552,7 +571,7 @@ watch(
               </div>
             </div>
             <div class="activity_main_semaine_indiv_value">
-              <p class="empreinte"><span>{{countEmpreinte(item)}}</span> kg(s) de CO2</p>
+              <p class="empreinte"><span>{{countEmpreinteHeader(item)}}</span> kg(s) de CO2</p>
               <p class="subtitle">Sous la moyenne FR de 692 kgs CO2/semaine</p>
               <Button noArrow='true' label="Voir toutes mes dépenses" url="Transaction" />
             </div>

@@ -65,7 +65,7 @@ const getCategories = async (idCateg, e) => {
 const transaction = async (token) => {
   const options = {
     url: "https://api.bridgeapi.io/v2/transactions",
-    params: { limit: "50" },
+    params: { limit: "500" },
     headers: {
       accept: "application/json",
       "Client-Id": import.meta.env.VITE_CLIENT_ID,
@@ -106,10 +106,26 @@ const filterTransaction = (transactions, impactArray) => {
     });
   });
 
-  totalEmission.value = filteredTransactions.reduce((total, transaction) => total + transaction.impact, 0);
+  // totalEmission.value = filteredTransactions.reduce((total, transaction) => total + transaction.impact, 0);
+  countEmpreinteHeader(transactions);
+  console.log(totalEmission.value);
   getGoal();
   transactionsStore.setupTransactions(filteredTransactions);
 };
+
+function countEmpreinteHeader(tab){
+  let points = 0;
+  let dateNow = new Date();
+  tab.forEach((e) => {
+    let date = new Date(e.date);
+    if(date.getMonth() === dateNow.getMonth()) {
+      if(e.impact){
+        points += e.impact
+      }
+    }
+  })
+  totalEmission.value = points.toFixed(2);
+}
 
 const getGoal = async () => {
   const value = await Preferences.get({ key: "goal" });
@@ -154,6 +170,7 @@ const getCheckBank = async () => {
     if (value) {
       getBankLink.value = true;
     }
+    console.log(value);
 };
 
 const getUserName = async () => {
@@ -282,7 +299,7 @@ const tips = [
       <div class="homepage_empreinte_cards" v-if="goalNumber === '0'">
         <div class="homepage_empreinte_cards_total card__wave" :style="getBankLink ? 'margin-bottom: 16px' : ''">
           <p :style="getBankLink ? 'text-align: center' : ''">
-            <span>{{ totalEmission.toFixed(2) }}</span> kg(s) de CO2
+            <span>{{ totalEmission }}</span> kg(s) de CO2
           </p>
           <Button v-if="getBankLink" label="Voir les dépenses du mois" url="Transaction" />
         </div>
@@ -318,7 +335,7 @@ const tips = [
         </div>
         <div class="homepage_empreinte_cards_total card__wave">
           <p>
-            <span>{{ totalEmission.toFixed(2) }}</span> kg(s) de CO2
+            <span>{{ totalEmission }}</span> kg(s) de CO2
           </p>
           <Button v-if="getBankLink" label="Voir les dépenses du mois" url="Transaction" />
         </div>
