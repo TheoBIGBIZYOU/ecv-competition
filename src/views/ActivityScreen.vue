@@ -5,8 +5,11 @@ import { Chart, registerables } from 'chart.js';
 import { useTransactionsStore } from "../store/transactions.js";
 import Button from "../components/Button.vue";
 import impact from "../assets/json/impacts.json"
+import 'chartjs-plugin-datalabels';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 Chart.register(...registerables);
+Chart.register(ChartDataLabels);
 
 const transactionsStore = useTransactionsStore();
 
@@ -29,6 +32,7 @@ const state = reactive({
   arrayTransacLastYear: [],
   arrayTransacOtherYears: [],
   moyenneCateg: [],
+  daysValue: [],
 })
 
 const transactionByWeek = (transactions) => {
@@ -100,9 +104,10 @@ transactionByYear(state.transactions)
 
 function countEmpreinte(tab){
   let points = 0;
-  tab.forEach((e) => {
-    points += e.impact
-    console.log(points)
+  state.daysValue.forEach((e) => {
+    e.forEach((i) => {
+      points += i.impact
+    })
   })
   return points.toFixed(2)
 }
@@ -159,10 +164,9 @@ function moyenneJour(item, returnValue){
       case 7:
         day7.push(e);
     }
-    days = [day1, day2, day3, day4, day5, day6, day7];
-
-
   })
+  days = [day1, day2, day3, day4, day5, day6, day7];
+  state.daysValue = days;
   days.forEach((e,index) => {
     moyenneTab[index] = countEmpreinteInVar(e)
   })
@@ -184,6 +188,7 @@ function pourcentCateg(item){
   let Mobilite = [];
   let Services = [];
   let Logement = [];
+  let Autres = [];
   item.forEach((e) => {
     impact.forEach((i) => {
       if(e.category === i.label){
@@ -196,21 +201,35 @@ function pourcentCateg(item){
             Services.push(e);
           case '#FF3767' :
             Logement.push(e);
+          case '#BBB6B6' :
+            Autres.push(e);
         }
       }
     })
   })
-  let categ = [Alimentation, Mobilite, Services, Logement];
+  let categ = [Alimentation, Mobilite, Services, Logement, Autres];
+  console.log(categ);
   let moyenneCateg = [];
   categ.forEach((e)=>{
     let moyenne = 0;
     e.forEach((i,index) => {
       moyenne+=i.impact
     })
-    moyenne = (moyenne / 12).toFixed(2);
+    // moyenne = (moyenne / 12).toFixed(2);
     moyenneCateg.push(moyenne);
   })
-  state.moyenneCateg = moyenneCateg;
+  console.log(moyenneCateg)
+  let moyenneTotal = 0
+  moyenneCateg.forEach((e) => {
+    moyenneTotal += e;
+  })
+  let pourcentCateg = [];
+
+  moyenneCateg.forEach((e) =>{
+    pourcentCateg.push((e * 100) / moyenneTotal)
+  })
+  console.log(pourcentCateg);
+  state.moyenneCateg = pourcentCateg;
 }
 
 function chartJour(value){
@@ -228,6 +247,20 @@ function chartJour(value){
       }]
     },
     options: {
+      tooltip: false,
+      plugins: {
+        datalabels: {
+          anchor: 'end',
+          align: 'bottom',
+          color: 'white',
+          formatter: Math.round,
+          font: {
+            weight: 'bold',
+            size: '16'
+          },
+          textDirection: 'ltr',
+        }
+      },
       scales: {
         x: {
           grid: {
@@ -243,11 +276,6 @@ function chartJour(value){
           }
         }
       },
-      // plugins: {
-      //   tooltip: {
-      //     enabled: false
-      //   }
-      // }
     },
   });
 }
@@ -255,7 +283,7 @@ function chartJour(value){
 function chartCateg(value){
   const canvas = document.querySelector('#graphiqueCateg_' + ongletActive.value + '_' + semaineActive.value);
   const ctx = canvas.getContext('2d');
-  const joursSemaine = ['Alimentation', 'Mobilité', 'Services', 'Logement'];
+  const joursSemaine = ['Alimentation', 'Mobilité', 'Services', 'Logement', 'Autres'];
   new Chart(ctx, {
     type: 'doughnut',
     data: {
@@ -263,7 +291,7 @@ function chartCateg(value){
       datasets: [{
         label: 'Données',
         data: value,
-        backgroundColor: ['#2FBC5D', '#002595', '#FFB72A', '#FF3767']
+        backgroundColor: ['#2FBC5D', '#002595', '#FFB72A', '#FF3767', '#BBB6B6']
       }]
     },
     options: {
@@ -271,17 +299,27 @@ function chartCateg(value){
         legend: {
           position: 'bottom'
         },
-        tooltip: {
-          callbacks: {
-            label: function(context) {
-              var label = context.label || '';
-              if (label) {
-                label += ': ';
-              }
-              label += context.formattedValue + ' kg de CO2'; // Ajouter le texte 'kg de CO2' à la valeur du segment
-              return label;
-            }
-          }
+        datalabels: {
+          anchor: 'end',
+          align: 'top',
+          color: '#5D85FD',
+          formatter: function(value, context) {
+            return value.toFixed(2) + '%'; // Ajouter '%' après chaque valeur
+          },
+          backgroundColor: function(context) {
+            return context.dataset.backgroundColor;
+          },
+          borderColor: 'white',
+          borderRadius: 5,
+          borderWidth: 0,
+          color: 'white',
+          font: {
+            weight: 'bold',
+            size: '16'
+          },
+          textDirection: 'ltr',
+          textAlign: 'center',
+          clip: true
         }
       }
     }
@@ -507,9 +545,9 @@ watch(
                   <path d="M12.0227 3.64498C12.2224 3.84468 12.2406 4.15717 12.0772 4.37738L12.0227 4.44047L7.17075 9.29272L12.0227 14.145C12.2224 14.3447 12.2406 14.6572 12.0772 14.8774L12.0227 14.9405C11.823 15.1402 11.5105 15.1583 11.2903 14.9949L11.2273 14.9405L5.97725 9.69047C5.77755 9.49077 5.7594 9.17827 5.92279 8.95807L5.97725 8.89498L11.2273 3.64498C11.4469 3.42531 11.8031 3.42531 12.0227 3.64498Z" fill="#191B1F"/>
                 </svg>
               </div>
-              <p v-if="index === 0">Ce mois-ci</p>
-              <p v-if="index === 1">Le mois précédent</p>
-              <p v-if="index === 2">Il y a trois mois</p>
+              <p v-if="index === 0">Cette année</p>
+              <p v-if="index === 1">L'année dernière</p>
+              <p v-if="index === 2">Il y a trois ans</p>
               <div class="next"  @click="semaineActive + 1 !== 3 ? semaineActive = semaineActive + 1 : null">
                 <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M5.97725 14.9405C5.77755 14.7408 5.7594 14.4283 5.92279 14.2081L5.97725 14.145L10.8293 9.29272L5.97725 4.44047C5.77755 4.24077 5.7594 3.92827 5.92279 3.70807L5.97725 3.64498C6.17695 3.44528 6.48945 3.42712 6.70966 3.59051L6.77275 3.64498L12.0227 8.89498C12.2224 9.09468 12.2406 9.40718 12.0772 9.62738L12.0227 9.69047L6.77275 14.9405C6.55308 15.1601 6.19692 15.1601 5.97725 14.9405Z" fill="#191B1F"/>

@@ -88,9 +88,9 @@ watch(search, (newValue , oldValue)=>{
 })
 
 const selectedCategoryFunction = (e) => {
-  state.newWeekTransactions = computed(()=> searchDepense(state.weekTransactions,e));
-  state.newLastWeekTransactions = computed(()=> searchDepense(state.lastWeekTransactions,e));
-  state.newOtherTransactions = computed(()=> searchDepense(state.otherTransactions,e));
+  state.newWeekTransactions = computed(()=> searchDepense(state.weekTransactions,e.label));
+  state.newLastWeekTransactions = computed(()=> searchDepense(state.lastWeekTransactions,e.label));
+  state.newOtherTransactions = computed(()=> searchDepense(state.otherTransactions,e.label));
   totalEmission();
   openMenuSelect();
 }
