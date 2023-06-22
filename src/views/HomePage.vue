@@ -26,7 +26,11 @@ const transactions = ref([]);
 const filterArray = ref([]);
 const userPoints = ref([]);
 const firstName = ref('');
+const uuid = ref("");
+const userMail = ref('');
 const impacts = impact;
+
+const home = "http://localhost:5173/home";
 
 const state = reactive({
   userPoints: computed(() => transactionsStore.userPoints),
@@ -73,7 +77,6 @@ const transaction = async (token) => {
   };
 
   const response = await CapacitorHttp.get(options);
-  console.log(response.status)
   if (response.status === 200 || response.status === 201 || response.status === 202) {
     const promises = response.data.resources.map((e) => {
       return getCategories(e.category_id, e);
@@ -122,6 +125,29 @@ const accessToken = async () => {
   transaction(value);
 };
 
+const getUserUuid = async () => {
+  const { value } = await Preferences.get({ key: "uuid" });
+  uuid.value = value
+  getUserInfos(uuid.value);
+};
+
+const getUserInfos = (uuidVal) => {
+  const options = {
+    method: "GET",
+    headers: {
+      accept: "application/json",
+      "Client-Id": import.meta.env.VITE_CLIENT_ID,
+      "Client-Secret": import.meta.env.VITE_CLIENT_SECRET,
+      "Bridge-Version": "2021-06-01",
+    },
+  };
+
+  fetch(`https://api.bridgeapi.io/v2/users/${uuidVal}`, options)
+    .then((response) => response.json())
+    .then((response) => (userMail.value = response.email))
+    .catch((err) => console.error(err));
+};
+
 const getCheckBank = async () => {
   const { value } = await Preferences.get({ key: "linkBank" });
   if (value) {
@@ -134,6 +160,33 @@ const getUserName = async () => {
   firstName.value = value;
   
   firstName.value === null ? firstName.value = "John Doe" : ''
+};
+
+const bridgeConnect = async () => {
+  const options = {
+    url: "https://api.bridgeapi.io/v2/connect/items/add",
+    headers: {
+      accept: "application/json",
+      "Client-Id": import.meta.env.VITE_CLIENT_ID,
+      "Client-Secret": import.meta.env.VITE_CLIENT_SECRET,
+      Authorization: `Bearer ${accessTokenKey.value}`,
+      "Bridge-Version": "2021-06-01",
+      "content-type": "application/json",
+    },
+    data: { prefill_email: userMail.value, redirect_url: home },
+  };
+
+  const response = await CapacitorHttp.post(options);
+
+  if (
+    response.status === 200 ||
+    response.status === 201 ||
+    response.status === 202
+  ) {
+    window.location.href = response.data.redirect_url;
+  } else {
+    console.log("ERROR Request FAIL");
+  }
 };
 
 getUserName();
@@ -260,7 +313,7 @@ const tips = [
           </div>
           <div class="homepage_buttons_list_item_info">
             <div class="homepage_buttons_list_item_info_title">
-              <p>Lier mon compte à mes dépenses</p>
+              <p @click="bridgeConnect">Lier mon compte à mes dépenses</p>
             </div>
           </div>
         </div>
