@@ -60,7 +60,7 @@ const getCategories = async (idCateg, e) => {
 const transaction = async (token) => {
   const options = {
     url: "https://api.bridgeapi.io/v2/transactions",
-    params: { limit: "1000" },
+    params: { limit: "50" },
     headers: {
       accept: "application/json",
       "Client-Id": import.meta.env.VITE_CLIENT_ID,
@@ -72,7 +72,7 @@ const transaction = async (token) => {
   };
 
   const response = await CapacitorHttp.get(options);
-
+  console.log(response.status)
   if (response.status === 200 || response.status === 201 || response.status === 202) {
     const promises = response.data.resources.map((e) => {
       return getCategories(e.category_id, e);
@@ -500,7 +500,7 @@ const tips = [
           justify-content: space-evenly;
           &_title {
             p {
-              font-weight: 700;
+              font-weight: 600;
               font-size: 16px;
             }
           }
@@ -535,7 +535,7 @@ const tips = [
     &_title {
       margin-bottom: 15px;
       h2 {
-        font-size: 14px;
+        font-size: 16px;
         font-weight: 600;
       }
     }
