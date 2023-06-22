@@ -168,7 +168,7 @@ const tips = [
     <header class="homepage_header">
       <div class="homepage_header_info">
         <div class="homepage_header_info_image user_image">
-          <img src="../assets/img/coco_little.png" alt="" />
+          <img src="../assets/img/user_avatar.png" alt="" />
         </div>
         <div class="homepage_header_info_name">
           <p class="title">Bienvenue,</p>

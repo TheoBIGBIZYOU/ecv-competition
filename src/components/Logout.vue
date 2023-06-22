@@ -32,6 +32,7 @@ const logout = async () => {
     Preferences.remove({ key: "storyAlreadySee" });
     Preferences.remove({key: "accessToken" });
     Preferences.remove({key: "userName" });
+    Preferences.remove({key: "uuid"});
     Preferences.set({
       key: "goal",
       value: 0

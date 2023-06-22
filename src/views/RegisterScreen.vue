@@ -112,8 +112,6 @@ const authUser = async (mail, password) => {
 
   const response = await CapacitorHttp.post(options);
 
-  console.log(response)
-
   if (response.status === 200 || response.status === 201 || response.status === 202) {
     userStore.setupAccessToken(response.data.access_token);
     Preferences.set({
