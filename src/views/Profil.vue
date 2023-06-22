@@ -16,6 +16,7 @@ const showPassword = ref(false);
 const currentPassword = ref("");
 const currentPasswordInput = ref("");
 const newPassword = ref("");
+const newFirstName = ref("");
 const errorPass = ref(false);
 
 const accessToken = async () => {
@@ -94,6 +95,15 @@ const changePassword = (current, newPass) => {
 };
 
 const editUser = () => {
+  if (newFirstName.value !== "") {
+    Preferences.set({
+      key: "userName",
+      value: newFirstName.value,
+    });
+    firstName.value = newFirstName.value;
+    editUserInfo.value = false;
+  }
+
   if (newPassword.value !== "") {
     if (currentPassword.value === currentPasswordInput.value) {
       changePassword(currentPassword.value, newPassword.value);
@@ -189,7 +199,7 @@ accessToken();
         <form @submit.prevent="editUser">
           <div class="form_field">
             <label for="name">Prénom</label>
-            <input name="name" type="text" :placeholder="firstName" />
+            <input name="name" type="text" :placeholder="firstName" v-model="newFirstName"/>
           </div>
           <div class="form_field">
             <label for="email">Email</label>
@@ -276,6 +286,7 @@ accessToken();
 
 <style lang="scss" scoped>
 .profil {
+  min-height: calc(100vh - 100px);
   .userInfos {
     background-color: #fff;
     padding: 24px;
