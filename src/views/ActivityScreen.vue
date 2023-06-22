@@ -208,7 +208,6 @@ function pourcentCateg(item){
     })
   })
   let categ = [Alimentation, Mobilite, Services, Logement, Autres];
-  console.log(categ);
   let moyenneCateg = [];
   categ.forEach((e)=>{
     let moyenne = 0;
@@ -218,7 +217,6 @@ function pourcentCateg(item){
     // moyenne = (moyenne / 12).toFixed(2);
     moyenneCateg.push(moyenne);
   })
-  console.log(moyenneCateg)
   let moyenneTotal = 0
   moyenneCateg.forEach((e) => {
     moyenneTotal += e;
@@ -228,7 +226,6 @@ function pourcentCateg(item){
   moyenneCateg.forEach((e) =>{
     pourcentCateg.push((e * 100) / moyenneTotal)
   })
-  console.log(pourcentCateg);
   state.moyenneCateg = pourcentCateg;
 }
 

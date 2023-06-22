@@ -69,6 +69,10 @@ const bridgeConnect = async () => {
     response.status === 201 ||
     response.status === 202
   ) {
+    Preferences.set({
+      key: "alreadyBankTry",
+      value: true,
+    });
     window.location.href = response.data.redirect_url;
   } else {
     console.log("ERROR Request FAIL");
@@ -97,6 +101,7 @@ const bridgeConnectCheck = async () => {
   ) {
     if (response.data.resources.length === 0) {
       bridgeConnect();
+
     } else {
       await Preferences.set({
         key: "linkBank",

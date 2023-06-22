@@ -149,10 +149,11 @@ const getUserInfos = (uuidVal) => {
 };
 
 const getCheckBank = async () => {
-  const { value } = await Preferences.get({ key: "linkBank" });
-  if (value) {
-    getBankLink.value = true;
-  }
+    await bridgeConnectCheck();
+    const { value } = await Preferences.get({ key: "linkBank" });
+    if (value) {
+      getBankLink.value = true;
+    }
 };
 
 const getUserName = async () => {
@@ -184,6 +185,37 @@ const bridgeConnect = async () => {
     response.status === 202
   ) {
     window.location.href = response.data.redirect_url;
+  } else {
+    console.log("ERROR Request FAIL");
+  }
+};
+
+const bridgeConnectCheck = async () => {
+  const { value } = await Preferences.get({ key: "accessToken" });
+  const options = {
+    url: "https://api.bridgeapi.io/v2/items",
+    headers: {
+      accept: "application/json",
+      "Client-Id": import.meta.env.VITE_CLIENT_ID,
+      "Client-Secret": import.meta.env.VITE_CLIENT_SECRET,
+      Authorization: `Bearer ${value}`,
+      "Bridge-Version": "2021-06-01",
+    },
+  };
+
+  const response = await CapacitorHttp.get(options);
+
+  if (
+      response.status === 200 ||
+      response.status === 201 ||
+      response.status === 202
+  ) {
+    if (response.data.resources.length !== 0) {
+      await Preferences.set({
+        key: "linkBank",
+        value: true,
+      });
+    }
   } else {
     console.log("ERROR Request FAIL");
   }
