@@ -25,6 +25,7 @@ const purcentGoal = ref(0);
 const transactions = ref([]);
 const filterArray = ref([]);
 const userPoints = ref([]);
+const firstName = ref('');
 const impacts = impact;
 
 const state = reactive({
@@ -60,7 +61,7 @@ const getCategories = async (idCateg, e) => {
 const transaction = async (token) => {
   const options = {
     url: "https://api.bridgeapi.io/v2/transactions",
-    params: { limit: "1000" },
+    params: { limit: "50" },
     headers: {
       accept: "application/json",
       "Client-Id": import.meta.env.VITE_CLIENT_ID,
@@ -128,7 +129,14 @@ const getCheckBank = async () => {
   }
 };
 
-const getFirstName = async () => {}
+const getUserName = async () => {
+  const { value } = await Preferences.get({ key: "userName" });
+  firstName.value = value;
+  
+  firstName.value === null ? firstName.value = "John Doe" : ''
+};
+
+getUserName();
 
 getCheckBank();
 
@@ -165,12 +173,12 @@ const tips = [
     <section class="homepage_empreinte">
     <header class="homepage_header">
       <div class="homepage_header_info">
-        <div class="homepage_header_info_image">
-          <img src="../assets/img/coco_little.png" alt="" />
+        <div class="homepage_header_info_image user_image">
+          <img src="../assets/img/user_avatar.png" alt="" />
         </div>
         <div class="homepage_header_info_name">
           <p class="title">Bienvenue,</p>
-          <p class="subtitle">Fleur</p>
+          <p class="subtitle">{{ firstName }}</p>
         </div>
       </div>
       <div class="homepage_header_right">
@@ -343,19 +351,6 @@ const tips = [
       display: flex;
       align-items: center;
       gap: 1rem;
-      &_image {
-        width: 45px;
-        height: 45px;
-        background-color: var(--grey);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 23px;
-
-        img {
-          width: 100%;
-        }
-      }
       &_name {
         .title {
           font-size: 12px;

@@ -33,11 +33,23 @@ const loginForm = async () => {
 
   const response = await CapacitorHttp.post(options);
 
-  if (response.status === 200 || response.status === 201 || response.status === 202) {
+  if (
+    response.status === 200 ||
+    response.status === 201 ||
+    response.status === 202
+  ) {
     userStore.setupAccessToken(response.data.access_token);
     Preferences.set({
       key: "accessToken",
       value: response.data.access_token,
+    });
+    Preferences.set({
+      key: "uuid",
+      value: response.data.user.uuid,
+    });
+    Preferences.set({
+      key: "password",
+      value: password.value,
     });
     bridgeConnectCheck();
   } else {
@@ -61,7 +73,11 @@ const bridgeConnect = async () => {
 
   const response = await CapacitorHttp.post(options);
 
-  if (response.status === 200 || response.status === 201 || response.status === 202) {
+  if (
+    response.status === 200 ||
+    response.status === 201 ||
+    response.status === 202
+  ) {
     window.location.href = response.data.redirect_url;
   } else {
     console.log("ERROR Request FAIL");
@@ -83,7 +99,11 @@ const bridgeConnectCheck = async () => {
 
   const response = await CapacitorHttp.get(options);
 
-  if (response.status === 200 || response.status === 201 || response.status === 202) {
+  if (
+    response.status === 200 ||
+    response.status === 201 ||
+    response.status === 202
+  ) {
     if (response.data.resources.length === 0) {
       bridgeConnect();
     } else {
@@ -122,7 +142,10 @@ const noAccount = () => {
                 :type="showPassword ? 'text' : 'password'"
                 v-model="password"
               />
-              <button class="showPassword" @click.prevent="showPassword = !showPassword">
+              <button
+                class="showPassword"
+                @click.prevent="showPassword = !showPassword"
+              >
                 <svg
                   width="16"
                   height="14"
@@ -159,6 +182,50 @@ const noAccount = () => {
 </template>
 
 <style lang="scss">
+.form_field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  label {
+    font-weight: 600;
+    font-size: 12px;
+  }
+  .passwordInput {
+    position: relative;
+    button {
+      background: unset;
+      border: 0px;
+      position: absolute;
+      top: 50%;
+      right: 16px;
+      transform: translateY(-50%);
+    }
+  }
+  input {
+    background: #ffffff;
+    box-shadow: 0px 8px 40px rgba(0, 0, 0, 0.05);
+    border: none;
+    border-radius: 8px;
+    height: 50px;
+    width: 100%;
+    padding: 16px;
+
+    &:disabled {
+      border: 1px solid #8D8D97;
+      background-color: #e9e9e9;
+    }
+  }
+  button[type="submit"] {
+    display: block;
+    margin-inline: auto;
+    width: 100%;
+    padding: 18px 0;
+    border-radius: 8px;
+    color: #fff;
+    background-color: var(--blue);
+    border: 0px;
+  }
+}
 .loginForm {
   max-height: 100vh;
   width: 90%;
@@ -182,45 +249,6 @@ const noAccount = () => {
       display: flex;
       flex-direction: column;
       gap: 32px;
-    }
-    .form_field {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      label {
-        font-weight: 600;
-        font-size: 12px;
-      }
-      .passwordInput {
-        position: relative;
-        button {
-          background: unset;
-          border: 0px;
-          position: absolute;
-          top: 50%;
-          right: 16px;
-          transform: translateY(-50%);
-        }
-      }
-      input {
-        background: #ffffff;
-        box-shadow: 0px 8px 40px rgba(0, 0, 0, 0.05);
-        border: none;
-        border-radius: 8px;
-        height: 50px;
-        width: 100%;
-        padding: 16px;
-      }
-      button[type="submit"] {
-        display: block;
-        margin-inline: auto;
-        width: 100%;
-        padding: 18px 0;
-        border-radius: 8px;
-        color: #fff;
-        background-color: var(--blue);
-        border: 0px;
-      }
     }
   }
   .noAccount {
